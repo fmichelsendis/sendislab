@@ -1,0 +1,93 @@
+---
+# title: Home - Sendis
+# author: Franco Michel-Sendis
+# date: April 2017
+output:
+  html_document:
+    toc : true
+    toc_float: true 
+    toc_depth: 3
+    #theme: united
+    includes:
+       in_header: myheader.html
+       after_body: footer2.html
+       bibliography: "fms.bib"
+       link-citations: true 
+--- 
+<br>
+
+# <span style="color:#FCA708"> Nuclear Data Benchmarking </span> 
+
+<b>Franco Michel-Sendis</b> - April 2017
+
+<hr>
+ 
+### Benchmarking 
+
+**Benchmarking** usually refers to the direct **comparison** of calculated to experimental values of a given observable and therefore implies an understanding of the uncertainties with which both these values are known. 
+
+**Integral benchmark experiments** are measurements of a macroscopic parameter generally designed to be simple enough so that the major variables at play can not only be reliably controlled during the measurement, but also accurately modeled in a calculation. Because these necessary simplifications delimit the representativeness of the phenomena being measured and simulated, when used for validation purposes the bechmark (or selection of benchmarks)  will determine a specific validation domain for the codes and data being tested. 
+
+
+### Scope of this work
+
+SENDIS (*Screening Evaluated Nuclear Data : Integral Survey*) is a new online platform built to provide an user friendly and consistent comparison of NDL performance across different sets of benchmarking suites from different institutions, using modern data analytics. 
+
+
+
+
+
+
+The work presented here aims at providing elements of answers to the following questions: 
+
+* Which novel metrics can we use to assess integral performance of a library?
+
+* How do different nuclear data libraries (NDL) compare in terms of integral performance? How has this performance evolved across different NDL releases through the years?
+
+* How do two assessments provided by two different *benchmarking suites* compare to each other? How to build a consistent comparison across different assessments done by different institutions?
+
+* How to easily and automatically spot general trends and outliers?
+
+* How to simplify and centralize the tasks above using modern data analysis frameworks?
+
+
+These questions feed the decision-making process of assembling or updating a NDL which is a collaborative challenge, always revolving about building a state-of-the-art, accurate representation of physical processes for most nuclides and reactons while also preserving or improving the integral performance of the library.
+
+### Criticality benchmarking 
+
+As concerns nuclear data benchmarking, one of the most important reference of documented of evaluated criticality benchmark experiments and a widely used source is the OECD NEA [International Criticality Safety Benchmark Evaluation Project](http://www.oecd-nea.org/science/wpncs/icsbep) (ICSBEP). By focusing first on the criticality part of the problem, we provide here a partial answer to the questions above.
+
+#### Some Definitions
+
+We use the term *benchmarking suite* to refer to the list of $N$ different ICSBEP evaluations used by institutions. The selection of benchmarks differs from institution to institution.
+
+* $k_c$: calculated multiplication factor;
+* $\sigma_c$: statistical error of calculation
+* $k_e$: experimentally measured (benchmark value) multiplication factor
+* $\sigma_e$ experimental uncertainty around benchmark value
+* 'Delta' : $\Delta = k_c - k_e$
+* 'Residual' : $R=\frac{\Delta}{\sigma_e}$
+* $\chi^2 = \frac{1}{N}\sum_i^N \frac{(k_c - k_e)^2}{\sigma_c^2 + \sigma_e^2}$
+
+<br>
+
+
+### Acknowledgements
+
+The *calculated values* in this work come from various contributions presented at JEFF meetings or contributed to the NEA, from the work of the following persons or institutions: 
+
+
+
+* O. Cabellos, F. Michel-Sendis (NEA,   OECD)
+* C. Jouanne (CEA,  France)
+* A.C. Kahler (LANL,  USA)
+* D.H. Kim (KAERI, Korea)
+* N. Leclaire, R. Ichou (IRSN,  France)
+* D. Rochman (PSI,   Switzerland)
+* S. Van der Marck (NRG,   Netherlands)
+
+
+All *experimental benchmark values and related physical parameters* (EALF, AFGE, sensitivity coefficients) are public data and have been extracted from the NEA DICE database, 2016 edition (acknowledgements to I. Hill). 
+
+<br>
+

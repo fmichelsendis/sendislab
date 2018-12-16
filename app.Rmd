@@ -1,0 +1,15 @@
+---
+#title: SENDIS1
+#runtime: shiny 
+output:
+  html_document:
+    includes:
+       in_header: myheader_app1.html
+       after_body: footer2.html
+    toc : false
+    toc_float: false
+---
+
+<style> div.main-container { max-width: 1600px; } body {background-color:#FFFFFF;} </style>
+<iframe src="https://sendis.shinyapps.io/app04/" style="border:none;" height="1500" width="100%" style="background-color: #FFFFFF;" /> 
+ 

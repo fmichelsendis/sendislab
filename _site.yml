@@ -1,0 +1,54 @@
+name: "my-website"
+bibliography: "fms.bib"
+link-citations: true 
+navbar:
+  title: <img src="sendis.png" height="100" width="100">
+  #type: inverse
+  left:
+    - text: "Home"
+      #icon: fa-home
+      href: index.html
+      
+    - text : "Mapping"
+      href: Map.html
+      
+    - text: "About"
+      #icon: fa-home
+      href: about.html
+      
+  right:
+    - text: "App"
+      icon: fa-bar-chart
+      href: app.html 
+
+    - text: "Topics"
+      #icon: fa-gear
+      menu:
+        - text: "Data"
+        - text: "Nuclear Data"
+          #href: page_a.html
+        - text: "Spent Nuclear Fuel"
+          #href: page_b.html
+        - text: "---------"
+        - text: "Simulations"
+        - text: "Monte Carlo Transport, Fuel Depletion"
+          #href: page_c.html
+        - text: "Thorium Fuel Cycle"
+          #href: page_d.html
+#   - icon: fa-info
+#      href: register.html
+#    - icon: fa-wikipedia-w #fa-lg
+#      href: https://github.com/fmichelsendis/jeff/wiki 
+#    - icon: fa-linkedin #fa-lg
+#      href: https://www.linkedin.com/in/francomichelsendis/
+output:
+  html_document:
+    #toc: true
+    #toc_float: true
+    #toc_depth: 2 
+    css: styles.css
+    theme: spacelab
+    highlight: tango
+    include:
+      after_body: footer2.html
+    
