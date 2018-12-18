@@ -2,7 +2,7 @@ name: "my-website"
 bibliography: "fms.bib"
 link-citations: true 
 navbar:
-  title: <img src="sendis.png" height="100" width="100">
+  title: <img src="images/sendis.png" height="100" width="100">
   #type: inverse
   left:
     - text: "Home"
@@ -46,9 +46,9 @@ output:
     #toc: true
     #toc_float: true
     #toc_depth: 2 
-    css: styles.css
+    css: css/styles.css
     theme: spacelab
     highlight: tango
     include:
-      after_body: footer2.html
+      after_body: html/footer2.html
     

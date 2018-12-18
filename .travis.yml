@@ -3,10 +3,9 @@ cache: packages
 sudo: false
 
 script:
-  - Rscript -e 'devtools::check()'
+  - Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
 
 after_success:
-  - Rscript -e 'pkgdown::build_site()'
 
 deploy:
   provider: pages

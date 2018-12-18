@@ -7,8 +7,8 @@ output:
     toc : false
     #theme: united
     includes:
-       in_header: myheader.html
-       after_body: footer2.html
+       in_header: html/myheader.html
+       after_body: html/footer2.html
 --- 
 <br>
 

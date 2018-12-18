@@ -4,8 +4,8 @@
 output:
   html_document:
     includes:
-       in_header: myheader_app1.html
-       after_body: footer2.html
+       in_header: html/myheader_app1.html
+       after_body: html/footer2.html
     toc : false
     toc_float: false
 ---
