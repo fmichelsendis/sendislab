@@ -17,33 +17,5 @@ output:
 
 <hr>
 
-### The author
 
-Sendis.org is the personal website of Franco Michel-Sendis.
-
-#### The tool 
-
-The SENDIS (*Screening Evaluated Nuclear Data : Integral Survey*, F. Michel-Sendis, 2017) application is a Shiny server application written in R programming language and making use, among others, of the plotly and ggplot2 graphical libraries. 
-
-The application is expected to be in continuous development phase in 2017, however, great care has already been taken to carefully cross-check the data imported from different sources.
-
-#### Disclaimers
- 
-* Sendis.org is under construction.
- 
-* Sendis.org and the SENDIS  application are entirely developed on a personal basis without commercial purposes and without the endorsement nor responsibility of any institution. All data included in SENDIS app is public and whenever possible has been included with permission from the original authors. 
-
-* If somehow I have included data or information that should not be online please let me know and I will remove it immediately. 
-
-#### Contact
-
-For more information, contact me at <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#102;&#x72;&#x61;&#x6e;&#99;&#x6f;&#x40;&#x73;&#101;&#x6e;&#x64;&#105;&#x73;&#x2e;&#111;&#114;&#103;">&#x66;&#114;&#x61;&#x6e;&#x63;&#x6f;&#x40;&#x73;&#x65;&#110;&#x64;&#x69;&#x73;&#x2e;&#111;&#x72;&#x67;</a>
-
-
- 
-
-
-
-
-<br>
 
