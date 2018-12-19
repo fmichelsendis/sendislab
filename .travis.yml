@@ -5,12 +5,15 @@ sudo: false
 script:
   - Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
 
+after_success:
+  - cp -r _site docs
+
 deploy:
   provider: pages
   skip_cleanup: true
   github-token: $GITHUB_OAUTH_TOKEN
   keep-history: true
-  local-dir: _site
+  local-dir: docs
   on: 
     branch: master
 
