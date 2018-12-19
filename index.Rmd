@@ -18,7 +18,7 @@ output:
 
 testing 
  
-just updated
+just updated now again
 
 <b>Under construction</b>
 
