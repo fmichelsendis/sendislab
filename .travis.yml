@@ -6,7 +6,7 @@ script:
   - Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
 
 after_success:
-  - cp -r _site publish
+  - cp -r _site/* publish/.
 
 deploy:
   provider: pages
