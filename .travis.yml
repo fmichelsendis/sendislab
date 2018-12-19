@@ -5,8 +5,6 @@ sudo: false
 script:
   - Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
 
-after_success:
-
 deploy:
   provider: pages
   skip_cleanup: true
