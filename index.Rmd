@@ -1,5 +1,5 @@
 ---
-# title: Home - Sendis
+title: <span style="color:#FCA708"> Sendislab</span> 
 # author: Franco Michel-Sendis
 # date: April 2017
 output:
@@ -17,8 +17,7 @@ output:
 <br>
 
 testing 
-
-# <span style="color:#FCA708"> Sendislab</span> 
+ 
 
 <b>Under construction</b>
 
