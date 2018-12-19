@@ -28,13 +28,7 @@ navbar:
         - text: "Nuclear Data"
           #href: page_a.html
         - text: "Spent Nuclear Fuel"
-          #href: page_b.html
-        - text: "---------"
-        - text: "Simulations"
-        - text: "Monte Carlo Transport, Fuel Depletion"
-          #href: page_c.html
-        - text: "Thorium Fuel Cycle"
-          #href: page_d.html
+          #href: page_b.html 
 #   - icon: fa-info
 #      href: register.html
 #    - icon: fa-wikipedia-w #fa-lg

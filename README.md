@@ -1,6 +1,6 @@
 # Sendislab
 
-A repository for creating the website [Sendislab](sendislab.org)
+A repository for creating the website [Sendislab](http://sendislab.org)
 
 ## Deployment 
 
