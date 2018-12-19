@@ -1,3 +1,30 @@
-Package: arbitrary
-Title: Does not matter.
-Version: 0.0.1
+Package: sendislab
+Title: Another amazing sendis project
+Version: 0.1
+Authors@R: 
+    person(given = "Franco",
+           family = "Michel-Sendis",
+           role = c("aut", "cre"),
+           email = "franco@sendis.org")
+Description: Prepares build of sendislab website
+Encoding: UTF-8
+Imports:
+    data.table,
+    ggplot2, 
+    kableExtra,
+    knitr,
+    pkgdown,
+    plotly,
+    rmarkdown,
+    randomForest,
+    rattle,
+    rpart,
+    rpart.plot,
+    scales,
+    splitstackshape,
+    tidyr,
+    tidyverse
+Depends: R (>= 2.10)
+Suggests: 
+    testthat,
+    rmarkdown
