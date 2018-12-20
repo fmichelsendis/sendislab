@@ -1,6 +1,7 @@
 *.Rproj
 *.Rproj.user/* 
-.Rhistory
+*.Rhistory
+*.Rbuildignore
 _site/
 
 
