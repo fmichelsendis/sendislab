@@ -5,16 +5,23 @@ navbar:
   title: <img src="images/sendis.png" height="100" width="100">
   #type: inverse
   left:
-    - text: "Home"
-      #icon: fa-home
+    - icon: fa-home
       href: index.html
-      
-    - text : "Mapping"
-      href: Map.html
       
     - text: "About"
       #icon: fa-home
       href: about.html
+      
+    - text : "Data"
+      href: Map.html
+      
+    - text: "Resources"
+      #icon: fa-gear
+      menu:
+        - text: "Presentations"
+        - text: "Articles"
+        - text: 
+   
       
   right:
     - text: "App"
