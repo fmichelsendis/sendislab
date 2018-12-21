@@ -12,8 +12,10 @@ navbar:
       #icon: fa-home
       href: about.html
       
-    - text : "Data"
-      href: Map.html
+    - text : "R Packages"
+      menu:
+        - text: "sendis"
+          href: https://fmichelsendis.github.io/sendis/
       
     - text: "Resources"
       #icon: fa-gear
@@ -28,20 +30,6 @@ navbar:
       icon: fa-bar-chart
       href: app.html 
 
-    - text: "Topics"
-      #icon: fa-gear
-      menu:
-        - text: "Data"
-        - text: "Nuclear Data"
-          #href: page_a.html
-        - text: "Spent Nuclear Fuel"
-          #href: page_b.html 
-#   - icon: fa-info
-#      href: register.html
-#    - icon: fa-wikipedia-w #fa-lg
-#      href: https://github.com/fmichelsendis/jeff/wiki 
-#    - icon: fa-linkedin #fa-lg
-#      href: https://www.linkedin.com/in/francomichelsendis/
 output:
   html_document:
     #toc: true
