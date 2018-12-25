@@ -16,8 +16,14 @@ navbar:
       menu:
         - text: "sendis"
           href: https://fmichelsendis.github.io/sendis/
-      
-    - text: "Resources"
+     
+    - text: "Articles"
+      #icon: fa-gear
+      menu:
+        - text: "Machine Learning"
+          href: clustering.html 
+        
+    - text: "Presentations"
       #icon: fa-gear
       menu:
         - text: "Presentations"
@@ -28,11 +34,15 @@ navbar:
   right:
     - text: "App"
       icon: fa-bar-chart
-      href: app.html 
-
+      menu:
+        - text: "Launch remote"
+          href: app.html 
+        - text: "Local install"
+          href: install.html 
+          
 output:
   html_document:
-    #toc: true
+    toc: true
     #toc_float: true
     #toc_depth: 2 
     css: css/styles.css
