@@ -11,7 +11,7 @@
 
 
 
-<title> Sendislab</title>
+<title>crits.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,10 +19,12 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<link rel="icon" href="images/sendis-favicon.png">
 
 
 
@@ -251,6 +253,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -340,22 +437,71 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><span style="color:#FCA708"> Sendislab</span></h1>
 
 </div>
 
 
 <p><br></p>
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>texte texte texte</p>
-<div id="subsection" class="section level2">
-<h2>subsection</h2>
-<p>bla bla bla</p>
+<div id="machine-learning-examples" class="section level1">
+<h1>Machine learning examples</h1>
+<div id="principal-component-analysis" class="section level2">
+<h2>Principal Component Analysis</h2>
+<p>Principal component analysis methods (PCA) are commonly used dimensionality reduction techniques that transform a collection of correlated variables into a smaller number of uncorrelated variables (or features) called <em>principal components</em>. Principal components are linear combinations of the original variables that account for most of the variance in the observed data. In other words, PCA projects the entire dataset onto a lower-dimensional subspace of different features where the principal components are the eigenvectors forming the axes.</p>
+<p>An important question is the number of principal components that are needed to describe the new feature subspace. A useful measure is the so-called “explained variance,” which can be calculated from the eigenvalues and tells us how much information (variance) can be attributed to each of the principal components.</p>
+<p>PCA is good for data visualisation and visualising groups of observations that may be gathered in different clusters (categorisation); however, the interpretability of the physical meaning of principal components may be a tradeoff.</p>
 </div>
 </div>
-<div id="bla-bla" class="section level1">
-<h1>Bla bla</h1>
+<div id="clustering" class="section level1">
+<h1>Clustering</h1>
+</div>
+<div id="random-forest-decision-trees" class="section level1">
+<h1>Random forest decision trees</h1>
+<p>Traditional statistical learning</p>
+<p>Questions that may be answered by machine learning or deep learning methodologies Can clustering methodologies be used to down select a benchmarking suite ? Can Principal Component Analysis be used to reveal big outliers and explain reasons for large biases ? Can regression models or decision trees predict bias ?</p>
+<p>Clustering does this without any prior knowledge of what these groups could or should look like.</p>
+<p>Two classical methods of clustering analysis are applied :</p>
+<ul>
+<li>kmeans</li>
+<li>gower distance + PAM</li>
+</ul>
+<p>The first is suited for data sets which are numerical only. The second can deal with categorical variables and mixed type data.</p>
+<div id="machine-learning-examples-1" class="section level2">
+<h2>Machine Learning examples</h2>
+<p>The <code>kmeans</code> function is part of the <code>stats</code> package which is by default in any R distribution.</p>
+<p>The typical methodology includes :</p>
+<ul>
+<li>determining the number of target groups or clusters</li>
+<li>running the kmeans algorith to identigy group members</li>
+</ul>
+</div>
+<div id="kmeans" class="section level2">
+<h2>Kmeans</h2>
+<p>The function <code>plot_scree</code> will create a scree plot for determining the target number of groups. It uses the approach of optimizing the ration of the within groups sum of squares (wss) to the between groups sum of squares (bss) : the sum, over all observations, of the squared differences of each observation from the overall group mean.</p>
+<p><span class="math display">\[
+tss = \sum_{i=1}^n(y_i -\overline{y})
+\]</span></p>
+</div>
+<div id="clustering-icsbep-benchmarks-based-on-sensitivity-data" class="section level2">
+<h2>Clustering ICSBEP benchmarks based on sensitivity data</h2>
+</div>
+<div id="prepping-the-data" class="section level2">
+<h2>Prepping the data</h2>
+</div>
+<div id="training-and-test-sets" class="section level2">
+<h2>Training and test sets</h2>
+</div>
+<div id="sfcompo-application" class="section level2">
+<h2>SFCOMPO application</h2>
+</div>
+<div id="other-techniques" class="section level2">
+<h2>other techniques</h2>
+</div>
+<div id="regressions-and-predictions" class="section level2">
+<h2>Regressions and predictions</h2>
+</div>
+<div id="for-mixed-data-types-gower-distance-pam" class="section level2">
+<h2>For mixed data types : gower distance + PAM</h2>
+</div>
 </div>
 
 <div class="bandContent">
@@ -364,6 +510,8 @@ $(document).ready(function () {
 </div>
 
 
+</div>
+</div>
 
 </div>
 

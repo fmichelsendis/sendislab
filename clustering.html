@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="F. Michel-Sendis" />
+
+<meta name="date" content="2018-12-25" />
+
+<title>clustering.utf8.md</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.8.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><img src="images/sendis.png" height="100" width="100"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R Packages
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://fmichelsendis.github.io/sendis/">sendis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="clustering.html">Machine Learning</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Presentations
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Presentations</li>
+    <li class="dropdown-header">Articles</li>
+    <li>
+      <a></a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-bar-chart"></span>
+     
+    App
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="app.html">Launch remote</a>
+    </li>
+    <li>
+      <a href="install.html">Local install</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<p><br></p>
+<div id="classification-of-sf-data" class="section level1">
+<h1>Classification of SF data</h1>
+<p>Machine Learning examples are applied to an example of spent nuclear fuel data.</p>
+<div id="the-sfcompo-2.0-dataset" class="section level2">
+<h2>The SFCOMPO-2.0 dataset</h2>
+<p><a href="http://www.oecd-nea.org/sfcompo">SFCOMPO-2.0</a> is the OECD NEA database of spent nuclear fuel assay data (Michel-Sendis, 2017).</p>
+<p>A dataset <code>sfcompo</code> has been extracted from the official SFCOMPO-2.0 database, containing data for 647 samples (This is lower than the official database of 750 samples because we choose to drop samples without uncertainty information, in order to have a consisten dataset without missing data).</p>
+<pre><code>#&gt;   
+   checking for file ‘/tmp/RtmpyCznwM/remotes2f0550688a19/fmichelsendis-rsfcompo2-3842044/DESCRIPTION’ ...
+  
+✔  checking for file ‘/tmp/RtmpyCznwM/remotes2f0550688a19/fmichelsendis-rsfcompo2-3842044/DESCRIPTION’
+#&gt; 
+  
+─  preparing ‘rsfcompo2’:
+#&gt; 
+  
+   checking DESCRIPTION meta-information ...
+  
+✔  checking DESCRIPTION meta-information
+#&gt; 
+  
+─  checking for LF line-endings in source and make files and shell scripts
+#&gt; 
+  
+─  checking for empty or unneeded directories
+#&gt; ─  looking to see if a ‘data/datalist’ file should be added
+#&gt; 
+  
+─  building ‘rsfcompo2_0.1.tar.gz’
+#&gt; 
+  
+   
+#&gt; </code></pre>
+</div>
+<div id="principal-component-analysis" class="section level2">
+<h2>Principal Component Analysis</h2>
+<p>Principal component analysis methods (PCA) are commonly used dimensionality reduction techniques that transform a collection of correlated variables into a smaller number of uncorrelated variables (or features) called <em>principal components</em>. Principal components are linear combinations of the original variables that account for most of the variance in the observed data. In other words, PCA projects the entire dataset onto a lower-dimensional subspace of different features where the principal components are the eigenvectors forming the axes.</p>
+<p>An important question is the number of principal components that are needed to describe the new feature subspace. A useful measure is the so-called “explained variance,” which can be calculated from the eigenvalues and tells us how much information (variance) can be attributed to each of the principal components.</p>
+<p>PCA is good for data visualisation and visualising groups of observations that may be gathered in different clusters (categorisation); however, the interpretability of the physical meaning of principal components may be a tradeoff.</p>
+<p><div id="htmlwidget-0b551f1267babebced32" style="width:864px;height:576px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0b551f1267babebced32">{"x":{"data":[{"x":[-2.19948349049713,-2.31278543053764,-2.12579819793132,-2.20348512419335,-2.16708710101056,-2.28019898688037,-1.15258818991506,-0.792687150973225,-1.00812627648545,-1.57583678040969,-1.97192213914083,-1.42701733532153,-1.81889591355253,-1.49314443704215,-1.93237383401691,-1.36274209510427,-1.03396948476376,-1.25522187533428,-2.40249484630064,-2.30001418649913,-2.36294273593549,-2.15831871272109,-2.14791643639682,-2.2376445123333,-2.18742625330408,-2.02054513644331,-2.03093785314809,-1.8511310020789,-1.87821496392747,-1.96246151763118,-1.98562994665627,-2.38847584789935,-2.39328510371573,-2.34505574051524,-2.44409704790471,-2.45568993932907,-2.3866643175418,-2.43430195079261,-2.44218538888965,-2.37448364440255,-1.40226027780175,-1.1479291550263,-1.30489763371724,-2.70812764879175,-2.70040862125726,-2.69388589839948,-2.68857700811022,-2.70761091504409,-2.69740229804822,-1.96920263270161,-2.04661605161114,-2.23619903507758,-1.99879519314314,-2.00101987565478,-2.02371368601484,-2.11855397517382,-2.28508035172499,-2.14661700267712,-2.1495647777498,-1.98677827486599,-2.02243008160516,-2.11512670123628,-2.13932732664847],"y":[0.102690844769102,0.338281627772599,0.19670661960495,0.317247856029093,0.103484983519925,0.338296925486569,0.259028942493913,0.238754651220001,0.230201595925716,0.246613244532513,0.380003231263854,0.312866372050441,0.418111870981228,0.247257424687271,0.384466374781863,0.0276875250104761,0.0162661896958093,0.0438062899449732,0.343435049223401,0.311626268767878,0.315062985086355,0.179156953821137,0.183310671419184,0.334292221666561,0.238334711405186,0.38381407332611,0.359679956564129,0.429434422002211,0.403701911077496,0.393236870577968,0.39134277040813,0.375868954824482,0.385081603548447,0.37944184369246,0.372602609234266,0.381817989289327,0.375818955566993,0.372311513323772,0.393085445017643,0.377666180530098,0.261187626294771,0.27466670588057,0.252820691611667,0.344948889817254,0.353397673268171,0.345172627503855,0.345651558110049,0.353188250543467,0.353356721265201,0.108188169280923,0.248310049066328,0.335185470927437,0.131011761820341,0.10839744522988,0.101274148323872,0.247799341522735,0.319227871883384,0.370685180823983,0.364714112622704,0.334650532514884,0.3096538711463,0.372538955488446,0.372507219668297],"text":["Groups: AGR<br />Groups: AGR<br />x: -2.19948349<br />y:  1.026908e-01<br />x: -2.19948349<br />y:  1.026908e-01","Groups: AGR<br />Groups: AGR<br />x: -2.31278543<br />y:  3.382816e-01<br />x: -2.31278543<br />y:  3.382816e-01","Groups: AGR<br />Groups: AGR<br />x: -2.12579820<br />y:  1.967066e-01<br />x: -2.12579820<br />y:  1.967066e-01","Groups: AGR<br />Groups: AGR<br />x: -2.20348512<br />y:  3.172479e-01<br />x: -2.20348512<br />y:  3.172479e-01","Groups: AGR<br />Groups: AGR<br />x: -2.16708710<br />y:  1.034850e-01<br />x: -2.16708710<br />y:  1.034850e-01","Groups: AGR<br />Groups: AGR<br />x: -2.28019899<br />y:  3.382969e-01<br />x: -2.28019899<br />y:  3.382969e-01","Groups: AGR<br />Groups: AGR<br />x: -1.15258819<br />y:  2.590289e-01<br />x: -1.15258819<br />y:  2.590289e-01","Groups: AGR<br />Groups: AGR<br />x: -0.79268715<br />y:  2.387547e-01<br />x: -0.79268715<br />y:  2.387547e-01","Groups: AGR<br />Groups: AGR<br />x: -1.00812628<br />y:  2.302016e-01<br />x: -1.00812628<br />y:  2.302016e-01","Groups: AGR<br />Groups: AGR<br />x: -1.57583678<br />y:  2.466132e-01<br />x: -1.57583678<br />y:  2.466132e-01","Groups: AGR<br />Groups: AGR<br />x: -1.97192214<br />y:  3.800032e-01<br />x: -1.97192214<br />y:  3.800032e-01","Groups: AGR<br />Groups: AGR<br />x: -1.42701734<br />y:  3.128664e-01<br />x: -1.42701734<br />y:  3.128664e-01","Groups: AGR<br />Groups: AGR<br />x: -1.81889591<br />y:  4.181119e-01<br />x: -1.81889591<br />y:  4.181119e-01","Groups: AGR<br />Groups: AGR<br />x: -1.49314444<br />y:  2.472574e-01<br />x: -1.49314444<br />y:  2.472574e-01","Groups: AGR<br />Groups: AGR<br />x: -1.93237383<br />y:  3.844664e-01<br />x: -1.93237383<br />y:  3.844664e-01","Groups: AGR<br />Groups: AGR<br />x: -1.36274210<br />y:  2.768753e-02<br />x: -1.36274210<br />y:  2.768753e-02","Groups: AGR<br />Groups: AGR<br />x: -1.03396948<br />y:  1.626619e-02<br />x: -1.03396948<br />y:  1.626619e-02","Groups: AGR<br />Groups: AGR<br />x: -1.25522188<br />y:  4.380629e-02<br />x: -1.25522188<br />y:  4.380629e-02","Groups: AGR<br />Groups: AGR<br />x: -2.40249485<br />y:  3.434350e-01<br />x: -2.40249485<br />y:  3.434350e-01","Groups: AGR<br />Groups: AGR<br />x: -2.30001419<br />y:  3.116263e-01<br />x: -2.30001419<br />y:  3.116263e-01","Groups: AGR<br />Groups: AGR<br />x: -2.36294274<br />y:  3.150630e-01<br />x: -2.36294274<br />y:  3.150630e-01","Groups: AGR<br />Groups: AGR<br />x: -2.15831871<br />y:  1.791570e-01<br />x: -2.15831871<br />y:  1.791570e-01","Groups: AGR<br />Groups: AGR<br />x: -2.14791644<br />y:  1.833107e-01<br />x: -2.14791644<br />y:  1.833107e-01","Groups: AGR<br />Groups: AGR<br />x: -2.23764451<br />y:  3.342922e-01<br />x: -2.23764451<br />y:  3.342922e-01","Groups: AGR<br />Groups: AGR<br />x: -2.18742625<br />y:  2.383347e-01<br />x: -2.18742625<br />y:  2.383347e-01","Groups: AGR<br />Groups: AGR<br />x: -2.02054514<br />y:  3.838141e-01<br />x: -2.02054514<br />y:  3.838141e-01","Groups: AGR<br />Groups: AGR<br />x: -2.03093785<br />y:  3.596800e-01<br />x: -2.03093785<br />y:  3.596800e-01","Groups: AGR<br />Groups: AGR<br />x: -1.85113100<br />y:  4.294344e-01<br />x: -1.85113100<br />y:  4.294344e-01","Groups: AGR<br />Groups: AGR<br />x: -1.87821496<br />y:  4.037019e-01<br />x: -1.87821496<br />y:  4.037019e-01","Groups: AGR<br />Groups: AGR<br />x: -1.96246152<br />y:  3.932369e-01<br />x: -1.96246152<br />y:  3.932369e-01","Groups: AGR<br />Groups: AGR<br />x: -1.98562995<br />y:  3.913428e-01<br />x: -1.98562995<br />y:  3.913428e-01","Groups: AGR<br />Groups: AGR<br />x: -2.38847585<br />y:  3.758690e-01<br />x: -2.38847585<br />y:  3.758690e-01","Groups: AGR<br />Groups: AGR<br />x: -2.39328510<br />y:  3.850816e-01<br />x: -2.39328510<br />y:  3.850816e-01","Groups: AGR<br />Groups: AGR<br />x: -2.34505574<br />y:  3.794418e-01<br />x: -2.34505574<br />y:  3.794418e-01","Groups: AGR<br />Groups: AGR<br />x: -2.44409705<br />y:  3.726026e-01<br />x: -2.44409705<br />y:  3.726026e-01","Groups: AGR<br />Groups: AGR<br />x: -2.45568994<br />y:  3.818180e-01<br />x: -2.45568994<br />y:  3.818180e-01","Groups: AGR<br />Groups: AGR<br />x: -2.38666432<br />y:  3.758190e-01<br />x: -2.38666432<br />y:  3.758190e-01","Groups: AGR<br />Groups: AGR<br />x: -2.43430195<br />y:  3.723115e-01<br />x: -2.43430195<br />y:  3.723115e-01","Groups: AGR<br />Groups: AGR<br />x: -2.44218539<br />y:  3.930854e-01<br />x: -2.44218539<br />y:  3.930854e-01","Groups: AGR<br />Groups: AGR<br />x: -2.37448364<br />y:  3.776662e-01<br />x: -2.37448364<br />y:  3.776662e-01","Groups: AGR<br />Groups: AGR<br />x: -1.40226028<br />y:  2.611876e-01<br />x: -1.40226028<br />y:  2.611876e-01","Groups: AGR<br />Groups: AGR<br />x: -1.14792916<br />y:  2.746667e-01<br />x: -1.14792916<br />y:  2.746667e-01","Groups: AGR<br />Groups: AGR<br />x: -1.30489763<br />y:  2.528207e-01<br />x: -1.30489763<br />y:  2.528207e-01","Groups: AGR<br />Groups: AGR<br />x: -2.70812765<br />y:  3.449489e-01<br />x: -2.70812765<br />y:  3.449489e-01","Groups: AGR<br />Groups: AGR<br />x: -2.70040862<br />y:  3.533977e-01<br />x: -2.70040862<br />y:  3.533977e-01","Groups: AGR<br />Groups: AGR<br />x: -2.69388590<br />y:  3.451726e-01<br />x: -2.69388590<br />y:  3.451726e-01","Groups: AGR<br />Groups: AGR<br />x: -2.68857701<br />y:  3.456516e-01<br />x: -2.68857701<br />y:  3.456516e-01","Groups: AGR<br />Groups: AGR<br />x: -2.70761092<br />y:  3.531883e-01<br />x: -2.70761092<br />y:  3.531883e-01","Groups: AGR<br />Groups: AGR<br />x: -2.69740230<br />y:  3.533567e-01<br />x: -2.69740230<br />y:  3.533567e-01","Groups: AGR<br />Groups: AGR<br />x: -1.96920263<br />y:  1.081882e-01<br />x: -1.96920263<br />y:  1.081882e-01","Groups: AGR<br />Groups: AGR<br />x: -2.04661605<br />y:  2.483100e-01<br />x: -2.04661605<br />y:  2.483100e-01","Groups: AGR<br />Groups: AGR<br />x: -2.23619904<br />y:  3.351855e-01<br />x: -2.23619904<br />y:  3.351855e-01","Groups: AGR<br />Groups: AGR<br />x: -1.99879519<br />y:  1.310118e-01<br />x: -1.99879519<br />y:  1.310118e-01","Groups: AGR<br />Groups: AGR<br />x: -2.00101988<br />y:  1.083974e-01<br />x: -2.00101988<br />y:  1.083974e-01","Groups: AGR<br />Groups: AGR<br />x: -2.02371369<br />y:  1.012741e-01<br />x: -2.02371369<br />y:  1.012741e-01","Groups: AGR<br />Groups: AGR<br />x: -2.11855398<br />y:  2.477993e-01<br />x: -2.11855398<br />y:  2.477993e-01","Groups: AGR<br />Groups: AGR<br />x: -2.28508035<br />y:  3.192279e-01<br />x: -2.28508035<br />y:  3.192279e-01","Groups: AGR<br />Groups: AGR<br />x: -2.14661700<br />y:  3.706852e-01<br />x: -2.14661700<br />y:  3.706852e-01","Groups: AGR<br />Groups: AGR<br />x: -2.14956478<br />y:  3.647141e-01<br />x: -2.14956478<br />y:  3.647141e-01","Groups: AGR<br />Groups: AGR<br />x: -1.98677827<br />y:  3.346505e-01<br />x: -1.98677827<br />y:  3.346505e-01","Groups: AGR<br />Groups: AGR<br />x: -2.02243008<br />y:  3.096539e-01<br />x: -2.02243008<br />y:  3.096539e-01","Groups: AGR<br />Groups: AGR<br />x: -2.11512670<br />y:  3.725390e-01<br />x: -2.11512670<br />y:  3.725390e-01","Groups: AGR<br />Groups: AGR<br />x: -2.13932733<br />y:  3.725072e-01<br />x: -2.13932733<br />y:  3.725072e-01"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.66929133858268,"symbol":"circle-open","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"AGR","legendgroup":"AGR","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-1.15096515586605,-2.50989332228096,-2.78933084729786,-0.211387760303996,-2.47266975579385,-2.78032987388719,-0.205350942479537,-2.42427911936061,-2.76451028598219,-1.18685422215111,-2.54832118062501,-0.202331741644595,-2.38092461251092,-2.76742680250631,-0.327491785118764,-2.34370104602381,-2.80044378095013,22.5311584870878,29.7458383959948,16.6847349611744,36.3058369715691,25.9156903191553,-1.32597911004994,7.32238523296113,-1.06919610509812,5.14851236850398,-0.856925662413016,9.73019087288677,-0.681810547080386,-0.814879286956999,11.1846019693696,-0.706121005490744,-0.425398010233737,10.7001354729966,-0.413493466592298,-2.24166323680803,-2.18280133929867,-2.15547027835751,-2.1810086841787,-2.08948121944136,-1.9726496444469,-1.43880605148305,-1.38564157398653,-1.63602605999573,-1.38565878138105,-1.43145170601958,-0.578722637374795,-1.22701663921216,-1.03813077422391,-0.435055587468994,-1.18954848066577,-0.527357293269044,-1.31610863768785,0.724911284164869,-0.0392877501651779,0.501661414214008,-0.306370836094041,0.818949177789274,0.231470620304133,0.512325605417993,0.230491860614985,-1.93992334618318,0.432455870074578,2.76504254628569,3.74545711483169,4.14982458870365,4.22464572238582,4.11825066299369,1.99481881160745,-1.30332438140134,-1.98346345967429,-0.826658799149211,2.25703559382819,0.45830239226315,3.548909019763,0.692997288244588,3.2501863857875,1.28185742383121,0.295442818489492,0.42058639896717,1.88506952253937,-1.38671780897051,-1.54857427960087,-1.79569100597787,-1.54203403799207,-1.53950009544556,-1.47989748038902,-1.53421296079403,-1.64290802297323,-1.39845105963506,-1.71371330815132,-1.79477185992911,-2.10345330491358,-1.96151331929292,-1.92637459224654,-2.02678487817658,-1.84184832840594,-2.38133554321839,-2.42483703391963,-2.41769278824465,-2.4487460543823,-2.36992718413665,-2.4178752031377,-2.45395748740893,-2.49404683693287,-2.4559728635327,-2.46439194383844,-2.51914957658117,-2.58634671508621,-2.677251321543,-2.46102637147295,-2.49157796913804,-2.53717598359484,-2.61215655509375,-2.70998379508065,-2.43383655362137,-2.52034606244673,-2.45604892112372,-2.48621997446251,-2.39724854304858,-2.49269307433778,-1.47077178916388,-1.42072214543268,-1.4096185360557,-1.40663835074092,-1.487916200306,-1.54226062513422,-1.47143116749067,-1.48895693029234,-1.43889953871336,-1.54039217283668,-1.60604562003372,-1.48857615095761,-1.40531741839912,-1.36792945724927,-1.64236740938903,-1.57346358577522,-1.49623806540092,-1.45095610261594,-1.4133094741606,-1.57284224746315,-1.43561010813246,-1.40568998165056,-1.39574662013348,-1.38858842131958,-1.50553319388835,-1.31251883096247,-1.42938501741625,-1.41179602806931,-1.34082473117372,-1.49192837738496,5.15685875444246,3.75526096902069,5.47826069498,3.93660805309902,7.62566590691047,6.39671959508629,3.66225783276376,6.34709962022396,5.49743821216464,6.93736706858013,7.07738524575353,6.81245306539937,6.60601694727034,3.63952489689148,6.63270919696487,6.58766097991357,6.81182380051137,6.77857831850689],"y":[0.0920167553300266,1.07088244529241,0.70380468724683,0.12824253108192,1.14324224780121,0.697809458339236,0.106472688707456,1.23730999106266,0.687272592337399,0.0968233705905084,0.996181590349499,0.0879995894070836,1.32158787869056,0.689215180475055,0.103964223079999,1.39394768119936,0.711206617909278,19.4966760140584,28.4063808445989,13.1120398880563,35.5972561553808,24.0784960598524,0.297904883405337,-12.3170578355962,-0.072717149692795,-3.55502555241103,0.586770090337656,-4.53814049601358,0.62697853524984,0.443862917866945,-11.2085007804883,0.502423205650306,0.07240654617314,-5.55929789750178,0.0978689286442451,0.208716335402983,0.20952803633273,0.204754697355697,0.0111938557082051,-0.00979734932667734,0.0438973254997492,0.318591456082925,0.344343222082994,0.273965879244122,0.0904092745216848,0.0613860439791321,0.552299095225256,0.334712242129897,0.401261630054599,0.544566532705135,0.290274198270411,0.583746152569497,0.318995631973646,0.951414711265826,0.717787867148576,0.986758223893718,0.570261746362053,0.853651518726954,1.04468173650151,0.960972035521635,1.57549292835081,0.282968293151809,-1.34726225675064,-2.12804598518467,-2.38329302742946,-2.46305922456097,-2.15201538099389,-2.40806155178599,-1.8427289125464,0.209474178060577,0.523962844102287,-0.214782361011866,-1.3225340614778,-0.446699952382687,-1.84893107214078,-0.379212484534738,-1.7937443894991,-1.27818702034054,-1.00628340908794,-1.38252393438053,-0.667747960716046,0.527438377968717,0.373299652881349,0.571677832873078,0.399045046001585,0.391347296561514,0.37452193128108,0.369014651126339,0.563772641848838,0.371903535967769,0.364555242800975,0.335158443697068,0.481970630592897,0.382414374236039,0.367678010503934,0.508337282683948,0.36665838194557,0.27867308834561,0.280064987478384,0.282774979183852,0.289651171942019,0.28366900570568,0.286103028470523,0.295971983450053,0.295466254757109,0.307440389778841,0.303314366011367,0.317719520799836,0.324473784485182,0.349219773261587,0.300100055459299,0.306978447592978,0.30995771533591,0.32982431431876,0.355927214940226,0.294377280397774,0.301889349779141,0.295041171326978,0.296659728331972,0.283904362071892,0.298605201616653,1.20291089231673,1.22323389021473,1.19176912404175,1.19906283141894,1.1422932208078,1.00172533302336,1.08527923327046,1.04828866599676,1.12410365064718,0.9591749211754,0.678941375602842,0.749794239504818,0.753037147239153,0.741363198268024,0.588914695223286,0.746887901689071,0.817507390229835,0.827523302913808,0.805736979062229,0.700768572520831,1.09514561896305,1.14112835917654,1.09573415961737,1.0789485021684,0.989698396775481,1.11277758706835,0.995168846246071,0.96945188718714,0.979309247553906,0.858481606743577,-1.02711254928779,-1.2020879964323,-0.872665365697171,-1.16221338416672,-3.11730233608415,-2.9887440684954,-0.851210876571221,-2.65742173846486,-2.56899386350709,-2.80103900007216,-2.71148063818301,-2.41880159333895,-2.76287336905481,-0.851493594466492,-2.64659952637264,-2.58966050244214,-2.93196404510899,-2.78401310250432],"text":["Groups: BWR<br />Groups: BWR<br />x: -1.15096516<br />y:  9.201676e-02<br />x: -1.15096516<br />y:  9.201676e-02","Groups: BWR<br />Groups: BWR<br />x: -2.50989332<br />y:  1.070882e+00<br />x: -2.50989332<br />y:  1.070882e+00","Groups: BWR<br />Groups: BWR<br />x: -2.78933085<br />y:  7.038047e-01<br />x: -2.78933085<br />y:  7.038047e-01","Groups: BWR<br />Groups: BWR<br />x: -0.21138776<br />y:  1.282425e-01<br />x: -0.21138776<br />y:  1.282425e-01","Groups: BWR<br />Groups: BWR<br />x: -2.47266976<br />y:  1.143242e+00<br />x: -2.47266976<br />y:  1.143242e+00","Groups: BWR<br />Groups: BWR<br />x: -2.78032987<br />y:  6.978095e-01<br />x: -2.78032987<br />y:  6.978095e-01","Groups: BWR<br />Groups: BWR<br />x: -0.20535094<br />y:  1.064727e-01<br />x: -0.20535094<br />y:  1.064727e-01","Groups: BWR<br />Groups: BWR<br />x: -2.42427912<br />y:  1.237310e+00<br />x: -2.42427912<br />y:  1.237310e+00","Groups: BWR<br />Groups: BWR<br />x: -2.76451029<br />y:  6.872726e-01<br />x: -2.76451029<br />y:  6.872726e-01","Groups: BWR<br />Groups: BWR<br />x: -1.18685422<br />y:  9.682337e-02<br />x: -1.18685422<br />y:  9.682337e-02","Groups: BWR<br />Groups: BWR<br />x: -2.54832118<br />y:  9.961816e-01<br />x: -2.54832118<br />y:  9.961816e-01","Groups: BWR<br />Groups: BWR<br />x: -0.20233174<br />y:  8.799959e-02<br />x: -0.20233174<br />y:  8.799959e-02","Groups: BWR<br />Groups: BWR<br />x: -2.38092461<br />y:  1.321588e+00<br />x: -2.38092461<br />y:  1.321588e+00","Groups: BWR<br />Groups: BWR<br />x: -2.76742680<br />y:  6.892152e-01<br />x: -2.76742680<br />y:  6.892152e-01","Groups: BWR<br />Groups: BWR<br />x: -0.32749179<br />y:  1.039642e-01<br />x: -0.32749179<br />y:  1.039642e-01","Groups: BWR<br />Groups: BWR<br />x: -2.34370105<br />y:  1.393948e+00<br />x: -2.34370105<br />y:  1.393948e+00","Groups: BWR<br />Groups: BWR<br />x: -2.80044378<br />y:  7.112066e-01<br />x: -2.80044378<br />y:  7.112066e-01","Groups: BWR<br />Groups: BWR<br />x: 22.53115849<br />y:  1.949668e+01<br />x: 22.53115849<br />y:  1.949668e+01","Groups: BWR<br />Groups: BWR<br />x: 29.74583840<br />y:  2.840638e+01<br />x: 29.74583840<br />y:  2.840638e+01","Groups: BWR<br />Groups: BWR<br />x: 16.68473496<br />y:  1.311204e+01<br />x: 16.68473496<br />y:  1.311204e+01","Groups: BWR<br />Groups: BWR<br />x: 36.30583697<br />y:  3.559726e+01<br />x: 36.30583697<br />y:  3.559726e+01","Groups: BWR<br />Groups: BWR<br />x: 25.91569032<br />y:  2.407850e+01<br />x: 25.91569032<br />y:  2.407850e+01","Groups: BWR<br />Groups: BWR<br />x: -1.32597911<br />y:  2.979049e-01<br />x: -1.32597911<br />y:  2.979049e-01","Groups: BWR<br />Groups: BWR<br />x:  7.32238523<br />y: -1.231706e+01<br />x:  7.32238523<br />y: -1.231706e+01","Groups: BWR<br />Groups: BWR<br />x: -1.06919611<br />y: -7.271715e-02<br />x: -1.06919611<br />y: -7.271715e-02","Groups: BWR<br />Groups: BWR<br />x:  5.14851237<br />y: -3.555026e+00<br />x:  5.14851237<br />y: -3.555026e+00","Groups: BWR<br />Groups: BWR<br />x: -0.85692566<br />y:  5.867701e-01<br />x: -0.85692566<br />y:  5.867701e-01","Groups: BWR<br />Groups: BWR<br />x:  9.73019087<br />y: -4.538140e+00<br />x:  9.73019087<br />y: -4.538140e+00","Groups: BWR<br />Groups: BWR<br />x: -0.68181055<br />y:  6.269785e-01<br />x: -0.68181055<br />y:  6.269785e-01","Groups: BWR<br />Groups: BWR<br />x: -0.81487929<br />y:  4.438629e-01<br />x: -0.81487929<br />y:  4.438629e-01","Groups: BWR<br />Groups: BWR<br />x: 11.18460197<br />y: -1.120850e+01<br />x: 11.18460197<br />y: -1.120850e+01","Groups: BWR<br />Groups: BWR<br />x: -0.70612101<br />y:  5.024232e-01<br />x: -0.70612101<br />y:  5.024232e-01","Groups: BWR<br />Groups: BWR<br />x: -0.42539801<br />y:  7.240655e-02<br />x: -0.42539801<br />y:  7.240655e-02","Groups: BWR<br />Groups: BWR<br />x: 10.70013547<br />y: -5.559298e+00<br />x: 10.70013547<br />y: -5.559298e+00","Groups: BWR<br />Groups: BWR<br />x: -0.41349347<br />y:  9.786893e-02<br />x: -0.41349347<br />y:  9.786893e-02","Groups: BWR<br />Groups: BWR<br />x: -2.24166324<br />y:  2.087163e-01<br />x: -2.24166324<br />y:  2.087163e-01","Groups: BWR<br />Groups: BWR<br />x: -2.18280134<br />y:  2.095280e-01<br />x: -2.18280134<br />y:  2.095280e-01","Groups: BWR<br />Groups: BWR<br />x: -2.15547028<br />y:  2.047547e-01<br />x: -2.15547028<br />y:  2.047547e-01","Groups: BWR<br />Groups: BWR<br />x: -2.18100868<br />y:  1.119386e-02<br />x: -2.18100868<br />y:  1.119386e-02","Groups: BWR<br />Groups: BWR<br />x: -2.08948122<br />y: -9.797349e-03<br />x: -2.08948122<br />y: -9.797349e-03","Groups: BWR<br />Groups: BWR<br />x: -1.97264964<br />y:  4.389733e-02<br />x: -1.97264964<br />y:  4.389733e-02","Groups: BWR<br />Groups: BWR<br />x: -1.43880605<br />y:  3.185915e-01<br />x: -1.43880605<br />y:  3.185915e-01","Groups: BWR<br />Groups: BWR<br />x: -1.38564157<br />y:  3.443432e-01<br />x: -1.38564157<br />y:  3.443432e-01","Groups: BWR<br />Groups: BWR<br />x: -1.63602606<br />y:  2.739659e-01<br />x: -1.63602606<br />y:  2.739659e-01","Groups: BWR<br />Groups: BWR<br />x: -1.38565878<br />y:  9.040927e-02<br />x: -1.38565878<br />y:  9.040927e-02","Groups: BWR<br />Groups: BWR<br />x: -1.43145171<br />y:  6.138604e-02<br />x: -1.43145171<br />y:  6.138604e-02","Groups: BWR<br />Groups: BWR<br />x: -0.57872264<br />y:  5.522991e-01<br />x: -0.57872264<br />y:  5.522991e-01","Groups: BWR<br />Groups: BWR<br />x: -1.22701664<br />y:  3.347122e-01<br />x: -1.22701664<br />y:  3.347122e-01","Groups: BWR<br />Groups: BWR<br />x: -1.03813077<br />y:  4.012616e-01<br />x: -1.03813077<br />y:  4.012616e-01","Groups: BWR<br />Groups: BWR<br />x: -0.43505559<br />y:  5.445665e-01<br />x: -0.43505559<br />y:  5.445665e-01","Groups: BWR<br />Groups: BWR<br />x: -1.18954848<br />y:  2.902742e-01<br />x: -1.18954848<br />y:  2.902742e-01","Groups: BWR<br />Groups: BWR<br />x: -0.52735729<br />y:  5.837462e-01<br />x: -0.52735729<br />y:  5.837462e-01","Groups: BWR<br />Groups: BWR<br />x: -1.31610864<br />y:  3.189956e-01<br />x: -1.31610864<br />y:  3.189956e-01","Groups: BWR<br />Groups: BWR<br />x:  0.72491128<br />y:  9.514147e-01<br />x:  0.72491128<br />y:  9.514147e-01","Groups: BWR<br />Groups: BWR<br />x: -0.03928775<br />y:  7.177879e-01<br />x: -0.03928775<br />y:  7.177879e-01","Groups: BWR<br />Groups: BWR<br />x:  0.50166141<br />y:  9.867582e-01<br />x:  0.50166141<br />y:  9.867582e-01","Groups: BWR<br />Groups: BWR<br />x: -0.30637084<br />y:  5.702617e-01<br />x: -0.30637084<br />y:  5.702617e-01","Groups: BWR<br />Groups: BWR<br />x:  0.81894918<br />y:  8.536515e-01<br />x:  0.81894918<br />y:  8.536515e-01","Groups: BWR<br />Groups: BWR<br />x:  0.23147062<br />y:  1.044682e+00<br />x:  0.23147062<br />y:  1.044682e+00","Groups: BWR<br />Groups: BWR<br />x:  0.51232561<br />y:  9.609720e-01<br />x:  0.51232561<br />y:  9.609720e-01","Groups: BWR<br />Groups: BWR<br />x:  0.23049186<br />y:  1.575493e+00<br />x:  0.23049186<br />y:  1.575493e+00","Groups: BWR<br />Groups: BWR<br />x: -1.93992335<br />y:  2.829683e-01<br />x: -1.93992335<br />y:  2.829683e-01","Groups: BWR<br />Groups: BWR<br />x:  0.43245587<br />y: -1.347262e+00<br />x:  0.43245587<br />y: -1.347262e+00","Groups: BWR<br />Groups: BWR<br />x:  2.76504255<br />y: -2.128046e+00<br />x:  2.76504255<br />y: -2.128046e+00","Groups: BWR<br />Groups: BWR<br />x:  3.74545711<br />y: -2.383293e+00<br />x:  3.74545711<br />y: -2.383293e+00","Groups: BWR<br />Groups: BWR<br />x:  4.14982459<br />y: -2.463059e+00<br />x:  4.14982459<br />y: -2.463059e+00","Groups: BWR<br />Groups: BWR<br />x:  4.22464572<br />y: -2.152015e+00<br />x:  4.22464572<br />y: -2.152015e+00","Groups: BWR<br />Groups: BWR<br />x:  4.11825066<br />y: -2.408062e+00<br />x:  4.11825066<br />y: -2.408062e+00","Groups: BWR<br />Groups: BWR<br />x:  1.99481881<br />y: -1.842729e+00<br />x:  1.99481881<br />y: -1.842729e+00","Groups: BWR<br />Groups: BWR<br />x: -1.30332438<br />y:  2.094742e-01<br />x: -1.30332438<br />y:  2.094742e-01","Groups: BWR<br />Groups: BWR<br />x: -1.98346346<br />y:  5.239628e-01<br />x: -1.98346346<br />y:  5.239628e-01","Groups: BWR<br />Groups: BWR<br />x: -0.82665880<br />y: -2.147824e-01<br />x: -0.82665880<br />y: -2.147824e-01","Groups: BWR<br />Groups: BWR<br />x:  2.25703559<br />y: -1.322534e+00<br />x:  2.25703559<br />y: -1.322534e+00","Groups: BWR<br />Groups: BWR<br />x:  0.45830239<br />y: -4.467000e-01<br />x:  0.45830239<br />y: -4.467000e-01","Groups: BWR<br />Groups: BWR<br />x:  3.54890902<br />y: -1.848931e+00<br />x:  3.54890902<br />y: -1.848931e+00","Groups: BWR<br />Groups: BWR<br />x:  0.69299729<br />y: -3.792125e-01<br />x:  0.69299729<br />y: -3.792125e-01","Groups: BWR<br />Groups: BWR<br />x:  3.25018639<br />y: -1.793744e+00<br />x:  3.25018639<br />y: -1.793744e+00","Groups: BWR<br />Groups: BWR<br />x:  1.28185742<br />y: -1.278187e+00<br />x:  1.28185742<br />y: -1.278187e+00","Groups: BWR<br />Groups: BWR<br />x:  0.29544282<br />y: -1.006283e+00<br />x:  0.29544282<br />y: -1.006283e+00","Groups: BWR<br />Groups: BWR<br />x:  0.42058640<br />y: -1.382524e+00<br />x:  0.42058640<br />y: -1.382524e+00","Groups: BWR<br />Groups: BWR<br />x:  1.88506952<br />y: -6.677480e-01<br />x:  1.88506952<br />y: -6.677480e-01","Groups: BWR<br />Groups: BWR<br />x: -1.38671781<br />y:  5.274384e-01<br />x: -1.38671781<br />y:  5.274384e-01","Groups: BWR<br />Groups: BWR<br />x: -1.54857428<br />y:  3.732997e-01<br />x: -1.54857428<br />y:  3.732997e-01","Groups: BWR<br />Groups: BWR<br />x: -1.79569101<br />y:  5.716778e-01<br />x: -1.79569101<br />y:  5.716778e-01","Groups: BWR<br />Groups: BWR<br />x: -1.54203404<br />y:  3.990450e-01<br />x: -1.54203404<br />y:  3.990450e-01","Groups: BWR<br />Groups: BWR<br />x: -1.53950010<br />y:  3.913473e-01<br />x: -1.53950010<br />y:  3.913473e-01","Groups: BWR<br />Groups: BWR<br />x: -1.47989748<br />y:  3.745219e-01<br />x: -1.47989748<br />y:  3.745219e-01","Groups: BWR<br />Groups: BWR<br />x: -1.53421296<br />y:  3.690147e-01<br />x: -1.53421296<br />y:  3.690147e-01","Groups: BWR<br />Groups: BWR<br />x: -1.64290802<br />y:  5.637726e-01<br />x: -1.64290802<br />y:  5.637726e-01","Groups: BWR<br />Groups: BWR<br />x: -1.39845106<br />y:  3.719035e-01<br />x: -1.39845106<br />y:  3.719035e-01","Groups: BWR<br />Groups: BWR<br />x: -1.71371331<br />y:  3.645552e-01<br />x: -1.71371331<br />y:  3.645552e-01","Groups: BWR<br />Groups: BWR<br />x: -1.79477186<br />y:  3.351584e-01<br />x: -1.79477186<br />y:  3.351584e-01","Groups: BWR<br />Groups: BWR<br />x: -2.10345330<br />y:  4.819706e-01<br />x: -2.10345330<br />y:  4.819706e-01","Groups: BWR<br />Groups: BWR<br />x: -1.96151332<br />y:  3.824144e-01<br />x: -1.96151332<br />y:  3.824144e-01","Groups: BWR<br />Groups: BWR<br />x: -1.92637459<br />y:  3.676780e-01<br />x: -1.92637459<br />y:  3.676780e-01","Groups: BWR<br />Groups: BWR<br />x: -2.02678488<br />y:  5.083373e-01<br />x: -2.02678488<br />y:  5.083373e-01","Groups: BWR<br />Groups: BWR<br />x: -1.84184833<br />y:  3.666584e-01<br />x: -1.84184833<br />y:  3.666584e-01","Groups: BWR<br />Groups: BWR<br />x: -2.38133554<br />y:  2.786731e-01<br />x: -2.38133554<br />y:  2.786731e-01","Groups: BWR<br />Groups: BWR<br />x: -2.42483703<br />y:  2.800650e-01<br />x: -2.42483703<br />y:  2.800650e-01","Groups: BWR<br />Groups: BWR<br />x: -2.41769279<br />y:  2.827750e-01<br />x: -2.41769279<br />y:  2.827750e-01","Groups: BWR<br />Groups: BWR<br />x: -2.44874605<br />y:  2.896512e-01<br />x: -2.44874605<br />y:  2.896512e-01","Groups: BWR<br />Groups: BWR<br />x: -2.36992718<br />y:  2.836690e-01<br />x: -2.36992718<br />y:  2.836690e-01","Groups: BWR<br />Groups: BWR<br />x: -2.41787520<br />y:  2.861030e-01<br />x: -2.41787520<br />y:  2.861030e-01","Groups: BWR<br />Groups: BWR<br />x: -2.45395749<br />y:  2.959720e-01<br />x: -2.45395749<br />y:  2.959720e-01","Groups: BWR<br />Groups: BWR<br />x: -2.49404684<br />y:  2.954663e-01<br />x: -2.49404684<br />y:  2.954663e-01","Groups: BWR<br />Groups: BWR<br />x: -2.45597286<br />y:  3.074404e-01<br />x: -2.45597286<br />y:  3.074404e-01","Groups: BWR<br />Groups: BWR<br />x: -2.46439194<br />y:  3.033144e-01<br />x: -2.46439194<br />y:  3.033144e-01","Groups: BWR<br />Groups: BWR<br />x: -2.51914958<br />y:  3.177195e-01<br />x: -2.51914958<br />y:  3.177195e-01","Groups: BWR<br />Groups: BWR<br />x: -2.58634672<br />y:  3.244738e-01<br />x: -2.58634672<br />y:  3.244738e-01","Groups: BWR<br />Groups: BWR<br />x: -2.67725132<br />y:  3.492198e-01<br />x: -2.67725132<br />y:  3.492198e-01","Groups: BWR<br />Groups: BWR<br />x: -2.46102637<br />y:  3.001001e-01<br />x: -2.46102637<br />y:  3.001001e-01","Groups: BWR<br />Groups: BWR<br />x: -2.49157797<br />y:  3.069784e-01<br />x: -2.49157797<br />y:  3.069784e-01","Groups: BWR<br />Groups: BWR<br />x: -2.53717598<br />y:  3.099577e-01<br />x: -2.53717598<br />y:  3.099577e-01","Groups: BWR<br />Groups: BWR<br />x: -2.61215656<br />y:  3.298243e-01<br />x: -2.61215656<br />y:  3.298243e-01","Groups: BWR<br />Groups: BWR<br />x: -2.70998380<br />y:  3.559272e-01<br />x: -2.70998380<br />y:  3.559272e-01","Groups: BWR<br />Groups: BWR<br />x: -2.43383655<br />y:  2.943773e-01<br />x: -2.43383655<br />y:  2.943773e-01","Groups: BWR<br />Groups: BWR<br />x: -2.52034606<br />y:  3.018893e-01<br />x: -2.52034606<br />y:  3.018893e-01","Groups: BWR<br />Groups: BWR<br />x: -2.45604892<br />y:  2.950412e-01<br />x: -2.45604892<br />y:  2.950412e-01","Groups: BWR<br />Groups: BWR<br />x: -2.48621997<br />y:  2.966597e-01<br />x: -2.48621997<br />y:  2.966597e-01","Groups: BWR<br />Groups: BWR<br />x: -2.39724854<br />y:  2.839044e-01<br />x: -2.39724854<br />y:  2.839044e-01","Groups: BWR<br />Groups: BWR<br />x: -2.49269307<br />y:  2.986052e-01<br />x: -2.49269307<br />y:  2.986052e-01","Groups: BWR<br />Groups: BWR<br />x: -1.47077179<br />y:  1.202911e+00<br />x: -1.47077179<br />y:  1.202911e+00","Groups: BWR<br />Groups: BWR<br />x: -1.42072215<br />y:  1.223234e+00<br />x: -1.42072215<br />y:  1.223234e+00","Groups: BWR<br />Groups: BWR<br />x: -1.40961854<br />y:  1.191769e+00<br />x: -1.40961854<br />y:  1.191769e+00","Groups: BWR<br />Groups: BWR<br />x: -1.40663835<br />y:  1.199063e+00<br />x: -1.40663835<br />y:  1.199063e+00","Groups: BWR<br />Groups: BWR<br />x: -1.48791620<br />y:  1.142293e+00<br />x: -1.48791620<br />y:  1.142293e+00","Groups: BWR<br />Groups: BWR<br />x: -1.54226063<br />y:  1.001725e+00<br />x: -1.54226063<br />y:  1.001725e+00","Groups: BWR<br />Groups: BWR<br />x: -1.47143117<br />y:  1.085279e+00<br />x: -1.47143117<br />y:  1.085279e+00","Groups: BWR<br />Groups: BWR<br />x: -1.48895693<br />y:  1.048289e+00<br />x: -1.48895693<br />y:  1.048289e+00","Groups: BWR<br />Groups: BWR<br />x: -1.43889954<br />y:  1.124104e+00<br />x: -1.43889954<br />y:  1.124104e+00","Groups: BWR<br />Groups: BWR<br />x: -1.54039217<br />y:  9.591749e-01<br />x: -1.54039217<br />y:  9.591749e-01","Groups: BWR<br />Groups: BWR<br />x: -1.60604562<br />y:  6.789414e-01<br />x: -1.60604562<br />y:  6.789414e-01","Groups: BWR<br />Groups: BWR<br />x: -1.48857615<br />y:  7.497942e-01<br />x: -1.48857615<br />y:  7.497942e-01","Groups: BWR<br />Groups: BWR<br />x: -1.40531742<br />y:  7.530371e-01<br />x: -1.40531742<br />y:  7.530371e-01","Groups: BWR<br />Groups: BWR<br />x: -1.36792946<br />y:  7.413632e-01<br />x: -1.36792946<br />y:  7.413632e-01","Groups: BWR<br />Groups: BWR<br />x: -1.64236741<br />y:  5.889147e-01<br />x: -1.64236741<br />y:  5.889147e-01","Groups: BWR<br />Groups: BWR<br />x: -1.57346359<br />y:  7.468879e-01<br />x: -1.57346359<br />y:  7.468879e-01","Groups: BWR<br />Groups: BWR<br />x: -1.49623807<br />y:  8.175074e-01<br />x: -1.49623807<br />y:  8.175074e-01","Groups: BWR<br />Groups: BWR<br />x: -1.45095610<br />y:  8.275233e-01<br />x: -1.45095610<br />y:  8.275233e-01","Groups: BWR<br />Groups: BWR<br />x: -1.41330947<br />y:  8.057370e-01<br />x: -1.41330947<br />y:  8.057370e-01","Groups: BWR<br />Groups: BWR<br />x: -1.57284225<br />y:  7.007686e-01<br />x: -1.57284225<br />y:  7.007686e-01","Groups: BWR<br />Groups: BWR<br />x: -1.43561011<br />y:  1.095146e+00<br />x: -1.43561011<br />y:  1.095146e+00","Groups: BWR<br />Groups: BWR<br />x: -1.40568998<br />y:  1.141128e+00<br />x: -1.40568998<br />y:  1.141128e+00","Groups: BWR<br />Groups: BWR<br />x: -1.39574662<br />y:  1.095734e+00<br />x: -1.39574662<br />y:  1.095734e+00","Groups: BWR<br />Groups: BWR<br />x: -1.38858842<br />y:  1.078949e+00<br />x: -1.38858842<br />y:  1.078949e+00","Groups: BWR<br />Groups: BWR<br />x: -1.50553319<br />y:  9.896984e-01<br />x: -1.50553319<br />y:  9.896984e-01","Groups: BWR<br />Groups: BWR<br />x: -1.31251883<br />y:  1.112778e+00<br />x: -1.31251883<br />y:  1.112778e+00","Groups: BWR<br />Groups: BWR<br />x: -1.42938502<br />y:  9.951688e-01<br />x: -1.42938502<br />y:  9.951688e-01","Groups: BWR<br />Groups: BWR<br />x: -1.41179603<br />y:  9.694519e-01<br />x: -1.41179603<br />y:  9.694519e-01","Groups: BWR<br />Groups: BWR<br />x: -1.34082473<br />y:  9.793092e-01<br />x: -1.34082473<br />y:  9.793092e-01","Groups: BWR<br />Groups: BWR<br />x: -1.49192838<br />y:  8.584816e-01<br />x: -1.49192838<br />y:  8.584816e-01","Groups: BWR<br />Groups: BWR<br />x:  5.15685875<br />y: -1.027113e+00<br />x:  5.15685875<br />y: -1.027113e+00","Groups: BWR<br />Groups: BWR<br />x:  3.75526097<br />y: -1.202088e+00<br />x:  3.75526097<br />y: -1.202088e+00","Groups: BWR<br />Groups: BWR<br />x:  5.47826069<br />y: -8.726654e-01<br />x:  5.47826069<br />y: -8.726654e-01","Groups: BWR<br />Groups: BWR<br />x:  3.93660805<br />y: -1.162213e+00<br />x:  3.93660805<br />y: -1.162213e+00","Groups: BWR<br />Groups: BWR<br />x:  7.62566591<br />y: -3.117302e+00<br />x:  7.62566591<br />y: -3.117302e+00","Groups: BWR<br />Groups: BWR<br />x:  6.39671960<br />y: -2.988744e+00<br />x:  6.39671960<br />y: -2.988744e+00","Groups: BWR<br />Groups: BWR<br />x:  3.66225783<br />y: -8.512109e-01<br />x:  3.66225783<br />y: -8.512109e-01","Groups: BWR<br />Groups: BWR<br />x:  6.34709962<br />y: -2.657422e+00<br />x:  6.34709962<br />y: -2.657422e+00","Groups: BWR<br />Groups: BWR<br />x:  5.49743821<br />y: -2.568994e+00<br />x:  5.49743821<br />y: -2.568994e+00","Groups: BWR<br />Groups: BWR<br />x:  6.93736707<br />y: -2.801039e+00<br />x:  6.93736707<br />y: -2.801039e+00","Groups: BWR<br />Groups: BWR<br />x:  7.07738525<br />y: -2.711481e+00<br />x:  7.07738525<br />y: -2.711481e+00","Groups: BWR<br />Groups: BWR<br />x:  6.81245307<br />y: -2.418802e+00<br />x:  6.81245307<br />y: -2.418802e+00","Groups: BWR<br />Groups: BWR<br />x:  6.60601695<br />y: -2.762873e+00<br />x:  6.60601695<br />y: -2.762873e+00","Groups: BWR<br />Groups: BWR<br />x:  3.63952490<br />y: -8.514936e-01<br />x:  3.63952490<br />y: -8.514936e-01","Groups: BWR<br />Groups: BWR<br />x:  6.63270920<br />y: -2.646600e+00<br />x:  6.63270920<br />y: -2.646600e+00","Groups: BWR<br />Groups: BWR<br />x:  6.58766098<br />y: -2.589661e+00<br />x:  6.58766098<br />y: -2.589661e+00","Groups: BWR<br />Groups: BWR<br />x:  6.81182380<br />y: -2.931964e+00<br />x:  6.81182380<br />y: -2.931964e+00","Groups: BWR<br />Groups: BWR<br />x:  6.77857832<br />y: -2.784013e+00<br />x:  6.77857832<br />y: -2.784013e+00"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(205,150,0,1)","opacity":1,"size":5.66929133858268,"symbol":"triangle-up-open","line":{"width":1.88976377952756,"color":"rgba(205,150,0,1)"}},"hoveron":"points","name":"BWR","legendgroup":"BWR","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-2.58166179104013,-2.56825734567285,-2.5271486831291,-2.72694383732263,-2.73031570649305,-2.71301399088623,-2.42992620859958,-2.41844015668124,-2.3470366770168,-2.39295200383829,-2.37650141237021,-2.30378505336505,-2.47701715791844,-2.46260138744231,-2.40675569424131,-2.69635837624236,-2.69184554114756,-2.67247693359804,-2.62056429473694,-2.61396930711558,-2.57918300184871,-2.54828152802417,-2.52877184597332,-2.48302150592002,-2.32810683573853,-2.31443465891136,-2.23642358766406],"y":[0.687229846926226,0.693456245040138,0.713076560016273,0.632923098229305,0.6379324709614,0.634282870591798,0.635155831779101,0.636102582597491,0.649776852423942,0.641329064122096,0.646143824628227,0.663018640896721,0.623410715154217,0.625397062143056,0.635503425221035,0.61730648573262,0.6162192655961,0.615551870848572,0.612622757848341,0.613531685849899,0.612329798932884,0.617491063339118,0.614093449568131,0.620041740795754,0.660489891016884,0.661030273770588,0.686877014800185],"text":["Groups: CANDU<br />Groups: CANDU<br />x: -2.58166179<br />y:  6.872298e-01<br />x: -2.58166179<br />y:  6.872298e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.56825735<br />y:  6.934562e-01<br />x: -2.56825735<br />y:  6.934562e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.52714868<br />y:  7.130766e-01<br />x: -2.52714868<br />y:  7.130766e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.72694384<br />y:  6.329231e-01<br />x: -2.72694384<br />y:  6.329231e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.73031571<br />y:  6.379325e-01<br />x: -2.73031571<br />y:  6.379325e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.71301399<br />y:  6.342829e-01<br />x: -2.71301399<br />y:  6.342829e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.42992621<br />y:  6.351558e-01<br />x: -2.42992621<br />y:  6.351558e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.41844016<br />y:  6.361026e-01<br />x: -2.41844016<br />y:  6.361026e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.34703668<br />y:  6.497769e-01<br />x: -2.34703668<br />y:  6.497769e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.39295200<br />y:  6.413291e-01<br />x: -2.39295200<br />y:  6.413291e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.37650141<br />y:  6.461438e-01<br />x: -2.37650141<br />y:  6.461438e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.30378505<br />y:  6.630186e-01<br />x: -2.30378505<br />y:  6.630186e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.47701716<br />y:  6.234107e-01<br />x: -2.47701716<br />y:  6.234107e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.46260139<br />y:  6.253971e-01<br />x: -2.46260139<br />y:  6.253971e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.40675569<br />y:  6.355034e-01<br />x: -2.40675569<br />y:  6.355034e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.69635838<br />y:  6.173065e-01<br />x: -2.69635838<br />y:  6.173065e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.69184554<br />y:  6.162193e-01<br />x: -2.69184554<br />y:  6.162193e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.67247693<br />y:  6.155519e-01<br />x: -2.67247693<br />y:  6.155519e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.62056429<br />y:  6.126228e-01<br />x: -2.62056429<br />y:  6.126228e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.61396931<br />y:  6.135317e-01<br />x: -2.61396931<br />y:  6.135317e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.57918300<br />y:  6.123298e-01<br />x: -2.57918300<br />y:  6.123298e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.54828153<br />y:  6.174911e-01<br />x: -2.54828153<br />y:  6.174911e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.52877185<br />y:  6.140934e-01<br />x: -2.52877185<br />y:  6.140934e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.48302151<br />y:  6.200417e-01<br />x: -2.48302151<br />y:  6.200417e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.32810684<br />y:  6.604899e-01<br />x: -2.32810684<br />y:  6.604899e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.31443466<br />y:  6.610303e-01<br />x: -2.31443466<br />y:  6.610303e-01","Groups: CANDU<br />Groups: CANDU<br />x: -2.23642359<br />y:  6.868770e-01<br />x: -2.23642359<br />y:  6.868770e-01"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":1,"size":5.66929133858268,"symbol":"cross-thin-open","line":{"width":1.88976377952756,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"CANDU","legendgroup":"CANDU","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-2.19732330626985,-2.67757749086176,-2.55533275984065,-2.49038200645397],"y":[0.65891510260182,0.642871518139893,0.729392431943991,0.717195390018292],"text":["Groups: MAGNOX<br />Groups: MAGNOX<br />x: -2.19732331<br />y:  6.589151e-01<br />x: -2.19732331<br />y:  6.589151e-01","Groups: MAGNOX<br />Groups: MAGNOX<br />x: -2.67757749<br />y:  6.428715e-01<br />x: -2.67757749<br />y:  6.428715e-01","Groups: MAGNOX<br />Groups: MAGNOX<br />x: -2.55533276<br />y:  7.293924e-01<br />x: -2.55533276<br />y:  7.293924e-01","Groups: MAGNOX<br />Groups: MAGNOX<br />x: -2.49038201<br />y:  7.171954e-01<br />x: -2.49038201<br />y:  7.171954e-01"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,190,103,1)","opacity":1,"size":5.66929133858268,"symbol":"x-thin-open","line":{"width":1.88976377952756,"color":"rgba(0,190,103,1)"}},"hoveron":"points","name":"MAGNOX","legendgroup":"MAGNOX","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[23.0937139649461,26.2998279153522,26.8265178172398,18.9534189417484,-2.11160116086888,-2.92816709079982,-2.85404734327288,0.0868413851305656,-2.89759395206414,-0.269789229896821,-2.4139878980377,0.72830604721828,-2.79063825125695,-2.18342074797343,-2.94601818331818,4.04140460848537,-2.8364476745928,-2.24516807591087,-2.83976646925819,-2.84042017123773,2.59359214641538,-2.42646874091868,5.44702415195182,-2.80401399945381,-2.19458781791956,-2.92942420999125,-0.543835949596098,-2.38289527191318,-2.79063825125695,-2.78591148309716,-2.81517721787374,-1.11816455543191,-2.51797302583023,-2.75776207016257,-0.110552196917396,-2.24932835687119,-2.81980341649822,14.2942702236409,12.8340727177366,12.9920199615886,5.74594317700543,-0.115511047202026,-1.04227643643775,-1.56314595016058,-0.634206828595719,-0.751181225023015,-1.63397550070762,-1.36292890524556,10.0807545783677,-1.99639329250019,-0.282116753012531,-1.61185329433286,-1.53302173679125,-0.185619594500223,-0.564602579086026,-1.24663985093194,-1.69451623310272,-0.92019052305551,-0.287791476059604,-0.739843168362107,-1.64875013776679,-2.17446108777887,-0.607766942744355,-1.69085138908912,-1.68570836489484,-1.60142659163203,-1.78113894104928,-1.67537113821391,-1.67415819209039,-1.62978600181177,-1.73517719914501,-1.63313312078571,-1.68779490685046,-1.58573245426135,0.244059708868114,0.156014007422633,-0.452290678435711,-1.06022575535042,-1.1569601666128,0.238289083467577,-1.34311928963317,2.16029420843654,-0.976015781722463,-0.174837747090376,-0.70583797469779,0.0868866364673686,-0.584603101718284,-1.55967356006699,-0.348863978379472,0.991369908990264,1.01197823018829,0.277774323483276,-1.95674021183818,-0.935677883809835,0.487988893063121,0.595286887652574,-0.042049795255469,0.195804652094569,2.87787199051928,5.05124813538822,5.98049519634431,5.89614419337674,4.47085361149314,9.31193890325436,11.0178221732605,10.1953613750745,5.15605910878824,5.64242715365014,6.09472450174948,5.58385184717881,5.96420617029606,5.63233649589884,5.7619045288812,10.0736729675922,10.834188138296,5.30333477179216,5.68543045331837,5.93749278751981,4.87188813426011,0.778650717279445,1.38759573802622,1.14467743628005,0.636987575241993,1.07894381631685,0.843404158057592,0.589429329062941,1.04858463659333,-1.56223372259338,-1.57108636165824,-1.86185729155142,-1.66670907576862,-1.58599842917798,-1.54283467027774,-1.57249348358916,-1.54594083710691,-1.43135965685272,-1.44004720431777,-1.40847716682859,-1.42812143048368,-1.41394480558724,-2.43293870937649,-2.02982898646848,-2.06354447944826,-2.32364865075186,-1.95237913831713,-2.00667306036094,-2.24620681455383,-2.00715982704378,-2.39866515842378,-2.65368031048514,-2.02550863074325,-2.58170113014733,-2.24027901576789,-2.38692162419077,-2.08530016797349,-1.99075541574404,-2.22089001481654,-2.48126028093519,-2.09246336667713,-2.59834084201102,-2.28546192074563,-2.62941899517891,-1.93748460310504,-1.52928195293347,-2.06474048408502,-1.25938213174779,-1.83549679507767,-1.14456297241111,-1.61907732112354,-0.789509086410396,-0.999428480309149,-1.59548817443415,-1.62476541249084,-1.8449367161405,-1.11803569109538,-1.01622859586799,-1.58408910516448,-1.56967488094001,-1.05898090370578,-1.56727277975752,-1.62418019366608,-0.916774339736463,-1.58536507108122,-1.10529934373299,-1.03907979157466,-2.71783067013546,-2.55244154557981,-2.36482736650069,-2.61415211871791,9.94679452854573,14.9872354924381,12.8045945300534,16.1578857363213,17.0072471059968,15.6604786033798,8.09114956974436,19.4220981567583,19.3146519470443,-2.22570188103958,-2.26359494291368,-2.46091416583089,-2.14522799029136,-2.22732956990652,-1.51348304041745,-1.49979235272215,-1.43798293722561,-1.51386806791232,-1.50503764390157,-2.14240180323922,-1.74097872376057,-1.70187807550684,-1.63819742251088,-1.67507073365594,-2.02177471696946,-1.63846991422389,-1.65696040749113,-1.97177634703925,-2.14655865019464,-1.68500328822368,-1.59870353871482,-1.58192151331273,-2.00019606986851,-2.13784836285353,-2.17060847068659,-1.70775405079489,-2.01071046142617,-1.61423601494262,-1.47521242814673,-1.55863209874897,-1.56203527823137,-2.13639166053082,-1.68524188830517,-1.59173513087697,-1.54160635792929,-1.58274955461713,-1.97968140259064,-1.24399814545984,-1.25759468537853,-1.43437314254187,-1.40605036188329,-2.093521927978,-1.62103053951199,-1.59363979476874,-1.56360043833028,-1.59939740771949,-1.92159125856837,-1.55330198959059,-1.60210152469058,-1.52106629685352,-1.55287117978122,-1.44387750494044,-1.28843657500389,-1.23488484039949,-1.46970203795252,-1.44866668952145,-2.0000965242244,-1.53027591271623,-1.47054046217711,-1.8420895169265,-1.52931709095158,-1.43652672419505,-2.56380399554922,-2.20587136028305,-2.23592527651005,-2.25873105109874,-2.31664281205379,-2.41995848318098,-1.72965348976953,-1.84451590674296,-2.36973286057044,-1.94546495679603,-1.8491136996751,-1.88010128247303,-2.17836276625969,-1.63647826553489,-2.17900523261871],"y":[4.36064437447642,2.29983038626151,6.23746640600171,1.97922670908537,1.84513233213661,0.79627858117904,0.746910048163438,0.299135098227363,0.775914898632577,0.251179750257765,1.25731534822686,0.388612580911397,0.704675502618883,1.70552047788433,0.808168560297452,-2.01274543552365,0.735187533539652,1.58548833489914,0.737398064868709,0.737833472554735,-1.62363979373975,1.23305353209155,-2.52587198233504,0.71358461373296,1.68381253713169,0.797115903652168,0.189952620694865,1.31775706561656,0.704675502618883,0.701527170119923,0.721020037294333,0.171657176001794,1.05517611168903,0.68277784530165,0.199067012295421,1.57740106285404,0.724101383995443,-2.1638018930535,-2.81767620780881,-1.94916661830563,-1.54013413532244,0.525898627753215,0.743839413563043,0.593884355232475,0.870518036718607,0.891131594157876,0.377006128093698,0.44600542708842,-4.3851140586811,0.430912239215897,-0.0355271689203184,0.210451521770157,0.45746784968838,-0.0478021668899335,0.0242905505834216,0.0765817685559548,0.227156916943701,0.0726714364187327,-0.0465222857959191,-0.0243327930275115,0.504162966163869,0.42519733910883,-0.0196089729627083,0.489366326531016,0.676617763522364,0.69750106715633,0.638288851927894,0.670368092056783,0.669045894752582,0.689347779381278,0.646913448102948,0.690607286167719,0.670504005827007,0.703204157903987,0.0249693095990694,0.11989401996324,0.109570453990223,0.166694649242479,0.111120021097061,0.0335920927817788,0.60315073735965,1.22460653297205,0.612102591281855,0.8353319329721,0.312698080973475,0.532423768828641,0.71424976846909,-0.31085957024674,-0.612781426537743,-0.858246634602956,-0.880901710250691,-0.835951544950866,0.125152071097773,-0.0504965491525008,-0.354506041686152,-0.32987328493722,-0.306786242349445,-1.15821186454407,-1.8674519452866,-2.38097026436913,-2.4151354558822,-2.25632466865772,-2.35304194177904,-6.39815216882992,-6.91676583647019,-6.32369235903879,-2.88702409167369,-2.8309894509568,-3.04697216340899,-2.79564203795063,-2.86966016998896,-2.79019845686773,-2.7464609941684,-5.959567250541,-7.10178612328536,-2.64933896621946,-2.91596748239496,-2.96962833907248,-2.49895734095703,-1.39281638867469,-1.50621340256923,-1.44532352924493,-1.32259821552481,-1.39825812958627,-1.38303357031291,-1.31001337282368,-1.40273236269357,0.421780181437507,0.425468369415383,0.37368903270922,0.393028271039711,0.421839396288974,0.415439103386722,0.417188067445032,0.412427976971483,0.440248053001942,0.432460516768748,0.458676454768185,0.435843178458099,0.474025226490105,0.235719018298343,0.19044835437022,0.289132135301463,0.402755426474748,0.315541700312919,0.266936873378279,0.244090571829712,0.302434344467503,0.318413168918345,0.611387451002831,0.306550741968289,0.561263993342804,0.317774984962534,0.319488281868662,0.337788158477881,0.370250691202852,0.383453902985804,0.374840960342398,0.322394615329396,0.572851231335241,0.296590654024827,0.594492829463362,0.338367333958103,0.810422194175069,0.353211044410504,0.424375447392052,0.67232796779617,0.309479534427159,0.768091839051138,0.54417643207473,0.291822530133746,0.788153421429713,0.772935392384926,0.710181461884897,0.307855893698726,0.261229218256809,0.812173651579974,0.301088447197378,0.269248571168901,0.790797628411853,0.753642592994948,0.48019054274866,0.816234746645428,0.31942525851011,0.313619608389243,0.211414711825544,0.179568893244296,0.34913220909515,0.583861579811695,-5.91230762416957,-10.8256804736603,-6.64253097792845,-7.51430063223245,-9.12349120956732,-7.24865473050703,-5.9527354737586,-14.9181204444856,-9.88253129644992,0.32716415036624,0.330516655068892,0.275096953467334,0.350318405642392,0.394911464169333,0.460454872792068,0.491552992597462,0.472715638912534,0.490282754091181,0.55635899432175,0.391516133558628,0.536430573297077,0.635641045232613,0.656235511388881,0.600794280263049,0.407880507159158,0.50992853585526,0.499579169939401,0.394891261406212,0.36472756493832,0.526635408966185,0.606271162231601,0.608866357586666,0.400879641989432,0.36139117093498,0.364345976197949,0.560074749686867,0.415100916837146,0.446455676187374,0.50079650324586,0.542585733574373,0.528248656792862,0.342777392662649,0.484696907469439,0.528955917815779,0.546005984873054,0.532026061921222,0.387137512677453,0.622326168007699,0.641532518315812,0.647466310175978,0.677469220174401,0.394302830966839,0.666324494746437,0.765464874475384,0.761987921903468,0.707474677516991,0.438554190752983,0.548088298551934,0.53450773136321,0.567135592062758,0.549445034166089,0.593325169270314,0.634984372623312,0.642373594936795,0.611808106082401,0.619725481205524,0.369739397384294,0.703298970610357,0.597547191515175,0.434657870167691,0.691561036585501,0.609178562629948,0.301317552954029,0.350228225698787,0.330810177413816,0.339151530145999,0.304223111252381,0.27025489649298,0.381724337583135,0.409749263529892,0.278179064537974,0.426847449757782,0.481298588911815,0.423842223568612,0.349455679362018,0.549415556591709,0.361150794652685],"text":["Groups: PWR<br />Groups: PWR<br />x: 23.09371396<br />y:  4.360644e+00<br />x: 23.09371396<br />y:  4.360644e+00","Groups: PWR<br />Groups: PWR<br />x: 26.29982792<br />y:  2.299830e+00<br />x: 26.29982792<br />y:  2.299830e+00","Groups: PWR<br />Groups: PWR<br />x: 26.82651782<br />y:  6.237466e+00<br />x: 26.82651782<br />y:  6.237466e+00","Groups: PWR<br />Groups: PWR<br />x: 18.95341894<br />y:  1.979227e+00<br />x: 18.95341894<br />y:  1.979227e+00","Groups: PWR<br />Groups: PWR<br />x: -2.11160116<br />y:  1.845132e+00<br />x: -2.11160116<br />y:  1.845132e+00","Groups: PWR<br />Groups: PWR<br />x: -2.92816709<br />y:  7.962786e-01<br />x: -2.92816709<br />y:  7.962786e-01","Groups: PWR<br />Groups: PWR<br />x: -2.85404734<br />y:  7.469100e-01<br />x: -2.85404734<br />y:  7.469100e-01","Groups: PWR<br />Groups: PWR<br />x:  0.08684139<br />y:  2.991351e-01<br />x:  0.08684139<br />y:  2.991351e-01","Groups: PWR<br />Groups: PWR<br />x: -2.89759395<br />y:  7.759149e-01<br />x: -2.89759395<br />y:  7.759149e-01","Groups: PWR<br />Groups: PWR<br />x: -0.26978923<br />y:  2.511798e-01<br />x: -0.26978923<br />y:  2.511798e-01","Groups: PWR<br />Groups: PWR<br />x: -2.41398790<br />y:  1.257315e+00<br />x: -2.41398790<br />y:  1.257315e+00","Groups: PWR<br />Groups: PWR<br />x:  0.72830605<br />y:  3.886126e-01<br />x:  0.72830605<br />y:  3.886126e-01","Groups: PWR<br />Groups: PWR<br />x: -2.79063825<br />y:  7.046755e-01<br />x: -2.79063825<br />y:  7.046755e-01","Groups: PWR<br />Groups: PWR<br />x: -2.18342075<br />y:  1.705520e+00<br />x: -2.18342075<br />y:  1.705520e+00","Groups: PWR<br />Groups: PWR<br />x: -2.94601818<br />y:  8.081686e-01<br />x: -2.94601818<br />y:  8.081686e-01","Groups: PWR<br />Groups: PWR<br />x:  4.04140461<br />y: -2.012745e+00<br />x:  4.04140461<br />y: -2.012745e+00","Groups: PWR<br />Groups: PWR<br />x: -2.83644767<br />y:  7.351875e-01<br />x: -2.83644767<br />y:  7.351875e-01","Groups: PWR<br />Groups: PWR<br />x: -2.24516808<br />y:  1.585488e+00<br />x: -2.24516808<br />y:  1.585488e+00","Groups: PWR<br />Groups: PWR<br />x: -2.83976647<br />y:  7.373981e-01<br />x: -2.83976647<br />y:  7.373981e-01","Groups: PWR<br />Groups: PWR<br />x: -2.84042017<br />y:  7.378335e-01<br />x: -2.84042017<br />y:  7.378335e-01","Groups: PWR<br />Groups: PWR<br />x:  2.59359215<br />y: -1.623640e+00<br />x:  2.59359215<br />y: -1.623640e+00","Groups: PWR<br />Groups: PWR<br />x: -2.42646874<br />y:  1.233054e+00<br />x: -2.42646874<br />y:  1.233054e+00","Groups: PWR<br />Groups: PWR<br />x:  5.44702415<br />y: -2.525872e+00<br />x:  5.44702415<br />y: -2.525872e+00","Groups: PWR<br />Groups: PWR<br />x: -2.80401400<br />y:  7.135846e-01<br />x: -2.80401400<br />y:  7.135846e-01","Groups: PWR<br />Groups: PWR<br />x: -2.19458782<br />y:  1.683813e+00<br />x: -2.19458782<br />y:  1.683813e+00","Groups: PWR<br />Groups: PWR<br />x: -2.92942421<br />y:  7.971159e-01<br />x: -2.92942421<br />y:  7.971159e-01","Groups: PWR<br />Groups: PWR<br />x: -0.54383595<br />y:  1.899526e-01<br />x: -0.54383595<br />y:  1.899526e-01","Groups: PWR<br />Groups: PWR<br />x: -2.38289527<br />y:  1.317757e+00<br />x: -2.38289527<br />y:  1.317757e+00","Groups: PWR<br />Groups: PWR<br />x: -2.79063825<br />y:  7.046755e-01<br />x: -2.79063825<br />y:  7.046755e-01","Groups: PWR<br />Groups: PWR<br />x: -2.78591148<br />y:  7.015272e-01<br />x: -2.78591148<br />y:  7.015272e-01","Groups: PWR<br />Groups: PWR<br />x: -2.81517722<br />y:  7.210200e-01<br />x: -2.81517722<br />y:  7.210200e-01","Groups: PWR<br />Groups: PWR<br />x: -1.11816456<br />y:  1.716572e-01<br />x: -1.11816456<br />y:  1.716572e-01","Groups: PWR<br />Groups: PWR<br />x: -2.51797303<br />y:  1.055176e+00<br />x: -2.51797303<br />y:  1.055176e+00","Groups: PWR<br />Groups: PWR<br />x: -2.75776207<br />y:  6.827778e-01<br />x: -2.75776207<br />y:  6.827778e-01","Groups: PWR<br />Groups: PWR<br />x: -0.11055220<br />y:  1.990670e-01<br />x: -0.11055220<br />y:  1.990670e-01","Groups: PWR<br />Groups: PWR<br />x: -2.24932836<br />y:  1.577401e+00<br />x: -2.24932836<br />y:  1.577401e+00","Groups: PWR<br />Groups: PWR<br />x: -2.81980342<br />y:  7.241014e-01<br />x: -2.81980342<br />y:  7.241014e-01","Groups: PWR<br />Groups: PWR<br />x: 14.29427022<br />y: -2.163802e+00<br />x: 14.29427022<br />y: -2.163802e+00","Groups: PWR<br />Groups: PWR<br />x: 12.83407272<br />y: -2.817676e+00<br />x: 12.83407272<br />y: -2.817676e+00","Groups: PWR<br />Groups: PWR<br />x: 12.99201996<br />y: -1.949167e+00<br />x: 12.99201996<br />y: -1.949167e+00","Groups: PWR<br />Groups: PWR<br />x:  5.74594318<br />y: -1.540134e+00<br />x:  5.74594318<br />y: -1.540134e+00","Groups: PWR<br />Groups: PWR<br />x: -0.11551105<br />y:  5.258986e-01<br />x: -0.11551105<br />y:  5.258986e-01","Groups: PWR<br />Groups: PWR<br />x: -1.04227644<br />y:  7.438394e-01<br />x: -1.04227644<br />y:  7.438394e-01","Groups: PWR<br />Groups: PWR<br />x: -1.56314595<br />y:  5.938844e-01<br />x: -1.56314595<br />y:  5.938844e-01","Groups: PWR<br />Groups: PWR<br />x: -0.63420683<br />y:  8.705180e-01<br />x: -0.63420683<br />y:  8.705180e-01","Groups: PWR<br />Groups: PWR<br />x: -0.75118123<br />y:  8.911316e-01<br />x: -0.75118123<br />y:  8.911316e-01","Groups: PWR<br />Groups: PWR<br />x: -1.63397550<br />y:  3.770061e-01<br />x: -1.63397550<br />y:  3.770061e-01","Groups: PWR<br />Groups: PWR<br />x: -1.36292891<br />y:  4.460054e-01<br />x: -1.36292891<br />y:  4.460054e-01","Groups: PWR<br />Groups: PWR<br />x: 10.08075458<br />y: -4.385114e+00<br />x: 10.08075458<br />y: -4.385114e+00","Groups: PWR<br />Groups: PWR<br />x: -1.99639329<br />y:  4.309122e-01<br />x: -1.99639329<br />y:  4.309122e-01","Groups: PWR<br />Groups: PWR<br />x: -0.28211675<br />y: -3.552717e-02<br />x: -0.28211675<br />y: -3.552717e-02","Groups: PWR<br />Groups: PWR<br />x: -1.61185329<br />y:  2.104515e-01<br />x: -1.61185329<br />y:  2.104515e-01","Groups: PWR<br />Groups: PWR<br />x: -1.53302174<br />y:  4.574678e-01<br />x: -1.53302174<br />y:  4.574678e-01","Groups: PWR<br />Groups: PWR<br />x: -0.18561959<br />y: -4.780217e-02<br />x: -0.18561959<br />y: -4.780217e-02","Groups: PWR<br />Groups: PWR<br />x: -0.56460258<br />y:  2.429055e-02<br />x: -0.56460258<br />y:  2.429055e-02","Groups: PWR<br />Groups: PWR<br />x: -1.24663985<br />y:  7.658177e-02<br />x: -1.24663985<br />y:  7.658177e-02","Groups: PWR<br />Groups: PWR<br />x: -1.69451623<br />y:  2.271569e-01<br />x: -1.69451623<br />y:  2.271569e-01","Groups: PWR<br />Groups: PWR<br />x: -0.92019052<br />y:  7.267144e-02<br />x: -0.92019052<br />y:  7.267144e-02","Groups: PWR<br />Groups: PWR<br />x: -0.28779148<br />y: -4.652229e-02<br />x: -0.28779148<br />y: -4.652229e-02","Groups: PWR<br />Groups: PWR<br />x: -0.73984317<br />y: -2.433279e-02<br />x: -0.73984317<br />y: -2.433279e-02","Groups: PWR<br />Groups: PWR<br />x: -1.64875014<br />y:  5.041630e-01<br />x: -1.64875014<br />y:  5.041630e-01","Groups: PWR<br />Groups: PWR<br />x: -2.17446109<br />y:  4.251973e-01<br />x: -2.17446109<br />y:  4.251973e-01","Groups: PWR<br />Groups: PWR<br />x: -0.60776694<br />y: -1.960897e-02<br />x: -0.60776694<br />y: -1.960897e-02","Groups: PWR<br />Groups: PWR<br />x: -1.69085139<br />y:  4.893663e-01<br />x: -1.69085139<br />y:  4.893663e-01","Groups: PWR<br />Groups: PWR<br />x: -1.68570836<br />y:  6.766178e-01<br />x: -1.68570836<br />y:  6.766178e-01","Groups: PWR<br />Groups: PWR<br />x: -1.60142659<br />y:  6.975011e-01<br />x: -1.60142659<br />y:  6.975011e-01","Groups: PWR<br />Groups: PWR<br />x: -1.78113894<br />y:  6.382889e-01<br />x: -1.78113894<br />y:  6.382889e-01","Groups: PWR<br />Groups: PWR<br />x: -1.67537114<br />y:  6.703681e-01<br />x: -1.67537114<br />y:  6.703681e-01","Groups: PWR<br />Groups: PWR<br />x: -1.67415819<br />y:  6.690459e-01<br />x: -1.67415819<br />y:  6.690459e-01","Groups: PWR<br />Groups: PWR<br />x: -1.62978600<br />y:  6.893478e-01<br />x: -1.62978600<br />y:  6.893478e-01","Groups: PWR<br />Groups: PWR<br />x: -1.73517720<br />y:  6.469134e-01<br />x: -1.73517720<br />y:  6.469134e-01","Groups: PWR<br />Groups: PWR<br />x: -1.63313312<br />y:  6.906073e-01<br />x: -1.63313312<br />y:  6.906073e-01","Groups: PWR<br />Groups: PWR<br />x: -1.68779491<br />y:  6.705040e-01<br />x: -1.68779491<br />y:  6.705040e-01","Groups: PWR<br />Groups: PWR<br />x: -1.58573245<br />y:  7.032042e-01<br />x: -1.58573245<br />y:  7.032042e-01","Groups: PWR<br />Groups: PWR<br />x:  0.24405971<br />y:  2.496931e-02<br />x:  0.24405971<br />y:  2.496931e-02","Groups: PWR<br />Groups: PWR<br />x:  0.15601401<br />y:  1.198940e-01<br />x:  0.15601401<br />y:  1.198940e-01","Groups: PWR<br />Groups: PWR<br />x: -0.45229068<br />y:  1.095705e-01<br />x: -0.45229068<br />y:  1.095705e-01","Groups: PWR<br />Groups: PWR<br />x: -1.06022576<br />y:  1.666946e-01<br />x: -1.06022576<br />y:  1.666946e-01","Groups: PWR<br />Groups: PWR<br />x: -1.15696017<br />y:  1.111200e-01<br />x: -1.15696017<br />y:  1.111200e-01","Groups: PWR<br />Groups: PWR<br />x:  0.23828908<br />y:  3.359209e-02<br />x:  0.23828908<br />y:  3.359209e-02","Groups: PWR<br />Groups: PWR<br />x: -1.34311929<br />y:  6.031507e-01<br />x: -1.34311929<br />y:  6.031507e-01","Groups: PWR<br />Groups: PWR<br />x:  2.16029421<br />y:  1.224607e+00<br />x:  2.16029421<br />y:  1.224607e+00","Groups: PWR<br />Groups: PWR<br />x: -0.97601578<br />y:  6.121026e-01<br />x: -0.97601578<br />y:  6.121026e-01","Groups: PWR<br />Groups: PWR<br />x: -0.17483775<br />y:  8.353319e-01<br />x: -0.17483775<br />y:  8.353319e-01","Groups: PWR<br />Groups: PWR<br />x: -0.70583797<br />y:  3.126981e-01<br />x: -0.70583797<br />y:  3.126981e-01","Groups: PWR<br />Groups: PWR<br />x:  0.08688664<br />y:  5.324238e-01<br />x:  0.08688664<br />y:  5.324238e-01","Groups: PWR<br />Groups: PWR<br />x: -0.58460310<br />y:  7.142498e-01<br />x: -0.58460310<br />y:  7.142498e-01","Groups: PWR<br />Groups: PWR<br />x: -1.55967356<br />y: -3.108596e-01<br />x: -1.55967356<br />y: -3.108596e-01","Groups: PWR<br />Groups: PWR<br />x: -0.34886398<br />y: -6.127814e-01<br />x: -0.34886398<br />y: -6.127814e-01","Groups: PWR<br />Groups: PWR<br />x:  0.99136991<br />y: -8.582466e-01<br />x:  0.99136991<br />y: -8.582466e-01","Groups: PWR<br />Groups: PWR<br />x:  1.01197823<br />y: -8.809017e-01<br />x:  1.01197823<br />y: -8.809017e-01","Groups: PWR<br />Groups: PWR<br />x:  0.27777432<br />y: -8.359515e-01<br />x:  0.27777432<br />y: -8.359515e-01","Groups: PWR<br />Groups: PWR<br />x: -1.95674021<br />y:  1.251521e-01<br />x: -1.95674021<br />y:  1.251521e-01","Groups: PWR<br />Groups: PWR<br />x: -0.93567788<br />y: -5.049655e-02<br />x: -0.93567788<br />y: -5.049655e-02","Groups: PWR<br />Groups: PWR<br />x:  0.48798889<br />y: -3.545060e-01<br />x:  0.48798889<br />y: -3.545060e-01","Groups: PWR<br />Groups: PWR<br />x:  0.59528689<br />y: -3.298733e-01<br />x:  0.59528689<br />y: -3.298733e-01","Groups: PWR<br />Groups: PWR<br />x: -0.04204980<br />y: -3.067862e-01<br />x: -0.04204980<br />y: -3.067862e-01","Groups: PWR<br />Groups: PWR<br />x:  0.19580465<br />y: -1.158212e+00<br />x:  0.19580465<br />y: -1.158212e+00","Groups: PWR<br />Groups: PWR<br />x:  2.87787199<br />y: -1.867452e+00<br />x:  2.87787199<br />y: -1.867452e+00","Groups: PWR<br />Groups: PWR<br />x:  5.05124814<br />y: -2.380970e+00<br />x:  5.05124814<br />y: -2.380970e+00","Groups: PWR<br />Groups: PWR<br />x:  5.98049520<br />y: -2.415135e+00<br />x:  5.98049520<br />y: -2.415135e+00","Groups: PWR<br />Groups: PWR<br />x:  5.89614419<br />y: -2.256325e+00<br />x:  5.89614419<br />y: -2.256325e+00","Groups: PWR<br />Groups: PWR<br />x:  4.47085361<br />y: -2.353042e+00<br />x:  4.47085361<br />y: -2.353042e+00","Groups: PWR<br />Groups: PWR<br />x:  9.31193890<br />y: -6.398152e+00<br />x:  9.31193890<br />y: -6.398152e+00","Groups: PWR<br />Groups: PWR<br />x: 11.01782217<br />y: -6.916766e+00<br />x: 11.01782217<br />y: -6.916766e+00","Groups: PWR<br />Groups: PWR<br />x: 10.19536138<br />y: -6.323692e+00<br />x: 10.19536138<br />y: -6.323692e+00","Groups: PWR<br />Groups: PWR<br />x:  5.15605911<br />y: -2.887024e+00<br />x:  5.15605911<br />y: -2.887024e+00","Groups: PWR<br />Groups: PWR<br />x:  5.64242715<br />y: -2.830989e+00<br />x:  5.64242715<br />y: -2.830989e+00","Groups: PWR<br />Groups: PWR<br />x:  6.09472450<br />y: -3.046972e+00<br />x:  6.09472450<br />y: -3.046972e+00","Groups: PWR<br />Groups: PWR<br />x:  5.58385185<br />y: -2.795642e+00<br />x:  5.58385185<br />y: -2.795642e+00","Groups: PWR<br />Groups: PWR<br />x:  5.96420617<br />y: -2.869660e+00<br />x:  5.96420617<br />y: -2.869660e+00","Groups: PWR<br />Groups: PWR<br />x:  5.63233650<br />y: -2.790198e+00<br />x:  5.63233650<br />y: -2.790198e+00","Groups: PWR<br />Groups: PWR<br />x:  5.76190453<br />y: -2.746461e+00<br />x:  5.76190453<br />y: -2.746461e+00","Groups: PWR<br />Groups: PWR<br />x: 10.07367297<br />y: -5.959567e+00<br />x: 10.07367297<br />y: -5.959567e+00","Groups: PWR<br />Groups: PWR<br />x: 10.83418814<br />y: -7.101786e+00<br />x: 10.83418814<br />y: -7.101786e+00","Groups: PWR<br />Groups: PWR<br />x:  5.30333477<br />y: -2.649339e+00<br />x:  5.30333477<br />y: -2.649339e+00","Groups: PWR<br />Groups: PWR<br />x:  5.68543045<br />y: -2.915967e+00<br />x:  5.68543045<br />y: -2.915967e+00","Groups: PWR<br />Groups: PWR<br />x:  5.93749279<br />y: -2.969628e+00<br />x:  5.93749279<br />y: -2.969628e+00","Groups: PWR<br />Groups: PWR<br />x:  4.87188813<br />y: -2.498957e+00<br />x:  4.87188813<br />y: -2.498957e+00","Groups: PWR<br />Groups: PWR<br />x:  0.77865072<br />y: -1.392816e+00<br />x:  0.77865072<br />y: -1.392816e+00","Groups: PWR<br />Groups: PWR<br />x:  1.38759574<br />y: -1.506213e+00<br />x:  1.38759574<br />y: -1.506213e+00","Groups: PWR<br />Groups: PWR<br />x:  1.14467744<br />y: -1.445324e+00<br />x:  1.14467744<br />y: -1.445324e+00","Groups: PWR<br />Groups: PWR<br />x:  0.63698758<br />y: -1.322598e+00<br />x:  0.63698758<br />y: -1.322598e+00","Groups: PWR<br />Groups: PWR<br />x:  1.07894382<br />y: -1.398258e+00<br />x:  1.07894382<br />y: -1.398258e+00","Groups: PWR<br />Groups: PWR<br />x:  0.84340416<br />y: -1.383034e+00<br />x:  0.84340416<br />y: -1.383034e+00","Groups: PWR<br />Groups: PWR<br />x:  0.58942933<br />y: -1.310013e+00<br />x:  0.58942933<br />y: -1.310013e+00","Groups: PWR<br />Groups: PWR<br />x:  1.04858464<br />y: -1.402732e+00<br />x:  1.04858464<br />y: -1.402732e+00","Groups: PWR<br />Groups: PWR<br />x: -1.56223372<br />y:  4.217802e-01<br />x: -1.56223372<br />y:  4.217802e-01","Groups: PWR<br />Groups: PWR<br />x: -1.57108636<br />y:  4.254684e-01<br />x: -1.57108636<br />y:  4.254684e-01","Groups: PWR<br />Groups: PWR<br />x: -1.86185729<br />y:  3.736890e-01<br />x: -1.86185729<br />y:  3.736890e-01","Groups: PWR<br />Groups: PWR<br />x: -1.66670908<br />y:  3.930283e-01<br />x: -1.66670908<br />y:  3.930283e-01","Groups: PWR<br />Groups: PWR<br />x: -1.58599843<br />y:  4.218394e-01<br />x: -1.58599843<br />y:  4.218394e-01","Groups: PWR<br />Groups: PWR<br />x: -1.54283467<br />y:  4.154391e-01<br />x: -1.54283467<br />y:  4.154391e-01","Groups: PWR<br />Groups: PWR<br />x: -1.57249348<br />y:  4.171881e-01<br />x: -1.57249348<br />y:  4.171881e-01","Groups: PWR<br />Groups: PWR<br />x: -1.54594084<br />y:  4.124280e-01<br />x: -1.54594084<br />y:  4.124280e-01","Groups: PWR<br />Groups: PWR<br />x: -1.43135966<br />y:  4.402481e-01<br />x: -1.43135966<br />y:  4.402481e-01","Groups: PWR<br />Groups: PWR<br />x: -1.44004720<br />y:  4.324605e-01<br />x: -1.44004720<br />y:  4.324605e-01","Groups: PWR<br />Groups: PWR<br />x: -1.40847717<br />y:  4.586765e-01<br />x: -1.40847717<br />y:  4.586765e-01","Groups: PWR<br />Groups: PWR<br />x: -1.42812143<br />y:  4.358432e-01<br />x: -1.42812143<br />y:  4.358432e-01","Groups: PWR<br />Groups: PWR<br />x: -1.41394481<br />y:  4.740252e-01<br />x: -1.41394481<br />y:  4.740252e-01","Groups: PWR<br />Groups: PWR<br />x: -2.43293871<br />y:  2.357190e-01<br />x: -2.43293871<br />y:  2.357190e-01","Groups: PWR<br />Groups: PWR<br />x: -2.02982899<br />y:  1.904484e-01<br />x: -2.02982899<br />y:  1.904484e-01","Groups: PWR<br />Groups: PWR<br />x: -2.06354448<br />y:  2.891321e-01<br />x: -2.06354448<br />y:  2.891321e-01","Groups: PWR<br />Groups: PWR<br />x: -2.32364865<br />y:  4.027554e-01<br />x: -2.32364865<br />y:  4.027554e-01","Groups: PWR<br />Groups: PWR<br />x: -1.95237914<br />y:  3.155417e-01<br />x: -1.95237914<br />y:  3.155417e-01","Groups: PWR<br />Groups: PWR<br />x: -2.00667306<br />y:  2.669369e-01<br />x: -2.00667306<br />y:  2.669369e-01","Groups: PWR<br />Groups: PWR<br />x: -2.24620681<br />y:  2.440906e-01<br />x: -2.24620681<br />y:  2.440906e-01","Groups: PWR<br />Groups: PWR<br />x: -2.00715983<br />y:  3.024343e-01<br />x: -2.00715983<br />y:  3.024343e-01","Groups: PWR<br />Groups: PWR<br />x: -2.39866516<br />y:  3.184132e-01<br />x: -2.39866516<br />y:  3.184132e-01","Groups: PWR<br />Groups: PWR<br />x: -2.65368031<br />y:  6.113875e-01<br />x: -2.65368031<br />y:  6.113875e-01","Groups: PWR<br />Groups: PWR<br />x: -2.02550863<br />y:  3.065507e-01<br />x: -2.02550863<br />y:  3.065507e-01","Groups: PWR<br />Groups: PWR<br />x: -2.58170113<br />y:  5.612640e-01<br />x: -2.58170113<br />y:  5.612640e-01","Groups: PWR<br />Groups: PWR<br />x: -2.24027902<br />y:  3.177750e-01<br />x: -2.24027902<br />y:  3.177750e-01","Groups: PWR<br />Groups: PWR<br />x: -2.38692162<br />y:  3.194883e-01<br />x: -2.38692162<br />y:  3.194883e-01","Groups: PWR<br />Groups: PWR<br />x: -2.08530017<br />y:  3.377882e-01<br />x: -2.08530017<br />y:  3.377882e-01","Groups: PWR<br />Groups: PWR<br />x: -1.99075542<br />y:  3.702507e-01<br />x: -1.99075542<br />y:  3.702507e-01","Groups: PWR<br />Groups: PWR<br />x: -2.22089001<br />y:  3.834539e-01<br />x: -2.22089001<br />y:  3.834539e-01","Groups: PWR<br />Groups: PWR<br />x: -2.48126028<br />y:  3.748410e-01<br />x: -2.48126028<br />y:  3.748410e-01","Groups: PWR<br />Groups: PWR<br />x: -2.09246337<br />y:  3.223946e-01<br />x: -2.09246337<br />y:  3.223946e-01","Groups: PWR<br />Groups: PWR<br />x: -2.59834084<br />y:  5.728512e-01<br />x: -2.59834084<br />y:  5.728512e-01","Groups: PWR<br />Groups: PWR<br />x: -2.28546192<br />y:  2.965907e-01<br />x: -2.28546192<br />y:  2.965907e-01","Groups: PWR<br />Groups: PWR<br />x: -2.62941900<br />y:  5.944928e-01<br />x: -2.62941900<br />y:  5.944928e-01","Groups: PWR<br />Groups: PWR<br />x: -1.93748460<br />y:  3.383673e-01<br />x: -1.93748460<br />y:  3.383673e-01","Groups: PWR<br />Groups: PWR<br />x: -1.52928195<br />y:  8.104222e-01<br />x: -1.52928195<br />y:  8.104222e-01","Groups: PWR<br />Groups: PWR<br />x: -2.06474048<br />y:  3.532110e-01<br />x: -2.06474048<br />y:  3.532110e-01","Groups: PWR<br />Groups: PWR<br />x: -1.25938213<br />y:  4.243754e-01<br />x: -1.25938213<br />y:  4.243754e-01","Groups: PWR<br />Groups: PWR<br />x: -1.83549680<br />y:  6.723280e-01<br />x: -1.83549680<br />y:  6.723280e-01","Groups: PWR<br />Groups: PWR<br />x: -1.14456297<br />y:  3.094795e-01<br />x: -1.14456297<br />y:  3.094795e-01","Groups: PWR<br />Groups: PWR<br />x: -1.61907732<br />y:  7.680918e-01<br />x: -1.61907732<br />y:  7.680918e-01","Groups: PWR<br />Groups: PWR<br />x: -0.78950909<br />y:  5.441764e-01<br />x: -0.78950909<br />y:  5.441764e-01","Groups: PWR<br />Groups: PWR<br />x: -0.99942848<br />y:  2.918225e-01<br />x: -0.99942848<br />y:  2.918225e-01","Groups: PWR<br />Groups: PWR<br />x: -1.59548817<br />y:  7.881534e-01<br />x: -1.59548817<br />y:  7.881534e-01","Groups: PWR<br />Groups: PWR<br />x: -1.62476541<br />y:  7.729354e-01<br />x: -1.62476541<br />y:  7.729354e-01","Groups: PWR<br />Groups: PWR<br />x: -1.84493672<br />y:  7.101815e-01<br />x: -1.84493672<br />y:  7.101815e-01","Groups: PWR<br />Groups: PWR<br />x: -1.11803569<br />y:  3.078559e-01<br />x: -1.11803569<br />y:  3.078559e-01","Groups: PWR<br />Groups: PWR<br />x: -1.01622860<br />y:  2.612292e-01<br />x: -1.01622860<br />y:  2.612292e-01","Groups: PWR<br />Groups: PWR<br />x: -1.58408911<br />y:  8.121737e-01<br />x: -1.58408911<br />y:  8.121737e-01","Groups: PWR<br />Groups: PWR<br />x: -1.56967488<br />y:  3.010884e-01<br />x: -1.56967488<br />y:  3.010884e-01","Groups: PWR<br />Groups: PWR<br />x: -1.05898090<br />y:  2.692486e-01<br />x: -1.05898090<br />y:  2.692486e-01","Groups: PWR<br />Groups: PWR<br />x: -1.56727278<br />y:  7.907976e-01<br />x: -1.56727278<br />y:  7.907976e-01","Groups: PWR<br />Groups: PWR<br />x: -1.62418019<br />y:  7.536426e-01<br />x: -1.62418019<br />y:  7.536426e-01","Groups: PWR<br />Groups: PWR<br />x: -0.91677434<br />y:  4.801905e-01<br />x: -0.91677434<br />y:  4.801905e-01","Groups: PWR<br />Groups: PWR<br />x: -1.58536507<br />y:  8.162347e-01<br />x: -1.58536507<br />y:  8.162347e-01","Groups: PWR<br />Groups: PWR<br />x: -1.10529934<br />y:  3.194253e-01<br />x: -1.10529934<br />y:  3.194253e-01","Groups: PWR<br />Groups: PWR<br />x: -1.03907979<br />y:  3.136196e-01<br />x: -1.03907979<br />y:  3.136196e-01","Groups: PWR<br />Groups: PWR<br />x: -2.71783067<br />y:  2.114147e-01<br />x: -2.71783067<br />y:  2.114147e-01","Groups: PWR<br />Groups: PWR<br />x: -2.55244155<br />y:  1.795689e-01<br />x: -2.55244155<br />y:  1.795689e-01","Groups: PWR<br />Groups: PWR<br />x: -2.36482737<br />y:  3.491322e-01<br />x: -2.36482737<br />y:  3.491322e-01","Groups: PWR<br />Groups: PWR<br />x: -2.61415212<br />y:  5.838616e-01<br />x: -2.61415212<br />y:  5.838616e-01","Groups: PWR<br />Groups: PWR<br />x:  9.94679453<br />y: -5.912308e+00<br />x:  9.94679453<br />y: -5.912308e+00","Groups: PWR<br />Groups: PWR<br />x: 14.98723549<br />y: -1.082568e+01<br />x: 14.98723549<br />y: -1.082568e+01","Groups: PWR<br />Groups: PWR<br />x: 12.80459453<br />y: -6.642531e+00<br />x: 12.80459453<br />y: -6.642531e+00","Groups: PWR<br />Groups: PWR<br />x: 16.15788574<br />y: -7.514301e+00<br />x: 16.15788574<br />y: -7.514301e+00","Groups: PWR<br />Groups: PWR<br />x: 17.00724711<br />y: -9.123491e+00<br />x: 17.00724711<br />y: -9.123491e+00","Groups: PWR<br />Groups: PWR<br />x: 15.66047860<br />y: -7.248655e+00<br />x: 15.66047860<br />y: -7.248655e+00","Groups: PWR<br />Groups: PWR<br />x:  8.09114957<br />y: -5.952735e+00<br />x:  8.09114957<br />y: -5.952735e+00","Groups: PWR<br />Groups: PWR<br />x: 19.42209816<br />y: -1.491812e+01<br />x: 19.42209816<br />y: -1.491812e+01","Groups: PWR<br />Groups: PWR<br />x: 19.31465195<br />y: -9.882531e+00<br />x: 19.31465195<br />y: -9.882531e+00","Groups: PWR<br />Groups: PWR<br />x: -2.22570188<br />y:  3.271642e-01<br />x: -2.22570188<br />y:  3.271642e-01","Groups: PWR<br />Groups: PWR<br />x: -2.26359494<br />y:  3.305167e-01<br />x: -2.26359494<br />y:  3.305167e-01","Groups: PWR<br />Groups: PWR<br />x: -2.46091417<br />y:  2.750970e-01<br />x: -2.46091417<br />y:  2.750970e-01","Groups: PWR<br />Groups: PWR<br />x: -2.14522799<br />y:  3.503184e-01<br />x: -2.14522799<br />y:  3.503184e-01","Groups: PWR<br />Groups: PWR<br />x: -2.22732957<br />y:  3.949115e-01<br />x: -2.22732957<br />y:  3.949115e-01","Groups: PWR<br />Groups: PWR<br />x: -1.51348304<br />y:  4.604549e-01<br />x: -1.51348304<br />y:  4.604549e-01","Groups: PWR<br />Groups: PWR<br />x: -1.49979235<br />y:  4.915530e-01<br />x: -1.49979235<br />y:  4.915530e-01","Groups: PWR<br />Groups: PWR<br />x: -1.43798294<br />y:  4.727156e-01<br />x: -1.43798294<br />y:  4.727156e-01","Groups: PWR<br />Groups: PWR<br />x: -1.51386807<br />y:  4.902828e-01<br />x: -1.51386807<br />y:  4.902828e-01","Groups: PWR<br />Groups: PWR<br />x: -1.50503764<br />y:  5.563590e-01<br />x: -1.50503764<br />y:  5.563590e-01","Groups: PWR<br />Groups: PWR<br />x: -2.14240180<br />y:  3.915161e-01<br />x: -2.14240180<br />y:  3.915161e-01","Groups: PWR<br />Groups: PWR<br />x: -1.74097872<br />y:  5.364306e-01<br />x: -1.74097872<br />y:  5.364306e-01","Groups: PWR<br />Groups: PWR<br />x: -1.70187808<br />y:  6.356410e-01<br />x: -1.70187808<br />y:  6.356410e-01","Groups: PWR<br />Groups: PWR<br />x: -1.63819742<br />y:  6.562355e-01<br />x: -1.63819742<br />y:  6.562355e-01","Groups: PWR<br />Groups: PWR<br />x: -1.67507073<br />y:  6.007943e-01<br />x: -1.67507073<br />y:  6.007943e-01","Groups: PWR<br />Groups: PWR<br />x: -2.02177472<br />y:  4.078805e-01<br />x: -2.02177472<br />y:  4.078805e-01","Groups: PWR<br />Groups: PWR<br />x: -1.63846991<br />y:  5.099285e-01<br />x: -1.63846991<br />y:  5.099285e-01","Groups: PWR<br />Groups: PWR<br />x: -1.65696041<br />y:  4.995792e-01<br />x: -1.65696041<br />y:  4.995792e-01","Groups: PWR<br />Groups: PWR<br />x: -1.97177635<br />y:  3.948913e-01<br />x: -1.97177635<br />y:  3.948913e-01","Groups: PWR<br />Groups: PWR<br />x: -2.14655865<br />y:  3.647276e-01<br />x: -2.14655865<br />y:  3.647276e-01","Groups: PWR<br />Groups: PWR<br />x: -1.68500329<br />y:  5.266354e-01<br />x: -1.68500329<br />y:  5.266354e-01","Groups: PWR<br />Groups: PWR<br />x: -1.59870354<br />y:  6.062712e-01<br />x: -1.59870354<br />y:  6.062712e-01","Groups: PWR<br />Groups: PWR<br />x: -1.58192151<br />y:  6.088664e-01<br />x: -1.58192151<br />y:  6.088664e-01","Groups: PWR<br />Groups: PWR<br />x: -2.00019607<br />y:  4.008796e-01<br />x: -2.00019607<br />y:  4.008796e-01","Groups: PWR<br />Groups: PWR<br />x: -2.13784836<br />y:  3.613912e-01<br />x: -2.13784836<br />y:  3.613912e-01","Groups: PWR<br />Groups: PWR<br />x: -2.17060847<br />y:  3.643460e-01<br />x: -2.17060847<br />y:  3.643460e-01","Groups: PWR<br />Groups: PWR<br />x: -1.70775405<br />y:  5.600747e-01<br />x: -1.70775405<br />y:  5.600747e-01","Groups: PWR<br />Groups: PWR<br />x: -2.01071046<br />y:  4.151009e-01<br />x: -2.01071046<br />y:  4.151009e-01","Groups: PWR<br />Groups: PWR<br />x: -1.61423601<br />y:  4.464557e-01<br />x: -1.61423601<br />y:  4.464557e-01","Groups: PWR<br />Groups: PWR<br />x: -1.47521243<br />y:  5.007965e-01<br />x: -1.47521243<br />y:  5.007965e-01","Groups: PWR<br />Groups: PWR<br />x: -1.55863210<br />y:  5.425857e-01<br />x: -1.55863210<br />y:  5.425857e-01","Groups: PWR<br />Groups: PWR<br />x: -1.56203528<br />y:  5.282487e-01<br />x: -1.56203528<br />y:  5.282487e-01","Groups: PWR<br />Groups: PWR<br />x: -2.13639166<br />y:  3.427774e-01<br />x: -2.13639166<br />y:  3.427774e-01","Groups: PWR<br />Groups: PWR<br />x: -1.68524189<br />y:  4.846969e-01<br />x: -1.68524189<br />y:  4.846969e-01","Groups: PWR<br />Groups: PWR<br />x: -1.59173513<br />y:  5.289559e-01<br />x: -1.59173513<br />y:  5.289559e-01","Groups: PWR<br />Groups: PWR<br />x: -1.54160636<br />y:  5.460060e-01<br />x: -1.54160636<br />y:  5.460060e-01","Groups: PWR<br />Groups: PWR<br />x: -1.58274955<br />y:  5.320261e-01<br />x: -1.58274955<br />y:  5.320261e-01","Groups: PWR<br />Groups: PWR<br />x: -1.97968140<br />y:  3.871375e-01<br />x: -1.97968140<br />y:  3.871375e-01","Groups: PWR<br />Groups: PWR<br />x: -1.24399815<br />y:  6.223262e-01<br />x: -1.24399815<br />y:  6.223262e-01","Groups: PWR<br />Groups: PWR<br />x: -1.25759469<br />y:  6.415325e-01<br />x: -1.25759469<br />y:  6.415325e-01","Groups: PWR<br />Groups: PWR<br />x: -1.43437314<br />y:  6.474663e-01<br />x: -1.43437314<br />y:  6.474663e-01","Groups: PWR<br />Groups: PWR<br />x: -1.40605036<br />y:  6.774692e-01<br />x: -1.40605036<br />y:  6.774692e-01","Groups: PWR<br />Groups: PWR<br />x: -2.09352193<br />y:  3.943028e-01<br />x: -2.09352193<br />y:  3.943028e-01","Groups: PWR<br />Groups: PWR<br />x: -1.62103054<br />y:  6.663245e-01<br />x: -1.62103054<br />y:  6.663245e-01","Groups: PWR<br />Groups: PWR<br />x: -1.59363979<br />y:  7.654649e-01<br />x: -1.59363979<br />y:  7.654649e-01","Groups: PWR<br />Groups: PWR<br />x: -1.56360044<br />y:  7.619879e-01<br />x: -1.56360044<br />y:  7.619879e-01","Groups: PWR<br />Groups: PWR<br />x: -1.59939741<br />y:  7.074747e-01<br />x: -1.59939741<br />y:  7.074747e-01","Groups: PWR<br />Groups: PWR<br />x: -1.92159126<br />y:  4.385542e-01<br />x: -1.92159126<br />y:  4.385542e-01","Groups: PWR<br />Groups: PWR<br />x: -1.55330199<br />y:  5.480883e-01<br />x: -1.55330199<br />y:  5.480883e-01","Groups: PWR<br />Groups: PWR<br />x: -1.60210152<br />y:  5.345077e-01<br />x: -1.60210152<br />y:  5.345077e-01","Groups: PWR<br />Groups: PWR<br />x: -1.52106630<br />y:  5.671356e-01<br />x: -1.52106630<br />y:  5.671356e-01","Groups: PWR<br />Groups: PWR<br />x: -1.55287118<br />y:  5.494450e-01<br />x: -1.55287118<br />y:  5.494450e-01","Groups: PWR<br />Groups: PWR<br />x: -1.44387750<br />y:  5.933252e-01<br />x: -1.44387750<br />y:  5.933252e-01","Groups: PWR<br />Groups: PWR<br />x: -1.28843658<br />y:  6.349844e-01<br />x: -1.28843658<br />y:  6.349844e-01","Groups: PWR<br />Groups: PWR<br />x: -1.23488484<br />y:  6.423736e-01<br />x: -1.23488484<br />y:  6.423736e-01","Groups: PWR<br />Groups: PWR<br />x: -1.46970204<br />y:  6.118081e-01<br />x: -1.46970204<br />y:  6.118081e-01","Groups: PWR<br />Groups: PWR<br />x: -1.44866669<br />y:  6.197255e-01<br />x: -1.44866669<br />y:  6.197255e-01","Groups: PWR<br />Groups: PWR<br />x: -2.00009652<br />y:  3.697394e-01<br />x: -2.00009652<br />y:  3.697394e-01","Groups: PWR<br />Groups: PWR<br />x: -1.53027591<br />y:  7.032990e-01<br />x: -1.53027591<br />y:  7.032990e-01","Groups: PWR<br />Groups: PWR<br />x: -1.47054046<br />y:  5.975472e-01<br />x: -1.47054046<br />y:  5.975472e-01","Groups: PWR<br />Groups: PWR<br />x: -1.84208952<br />y:  4.346579e-01<br />x: -1.84208952<br />y:  4.346579e-01","Groups: PWR<br />Groups: PWR<br />x: -1.52931709<br />y:  6.915610e-01<br />x: -1.52931709<br />y:  6.915610e-01","Groups: PWR<br />Groups: PWR<br />x: -1.43652672<br />y:  6.091786e-01<br />x: -1.43652672<br />y:  6.091786e-01","Groups: PWR<br />Groups: PWR<br />x: -2.56380400<br />y:  3.013176e-01<br />x: -2.56380400<br />y:  3.013176e-01","Groups: PWR<br />Groups: PWR<br />x: -2.20587136<br />y:  3.502282e-01<br />x: -2.20587136<br />y:  3.502282e-01","Groups: PWR<br />Groups: PWR<br />x: -2.23592528<br />y:  3.308102e-01<br />x: -2.23592528<br />y:  3.308102e-01","Groups: PWR<br />Groups: PWR<br />x: -2.25873105<br />y:  3.391515e-01<br />x: -2.25873105<br />y:  3.391515e-01","Groups: PWR<br />Groups: PWR<br />x: -2.31664281<br />y:  3.042231e-01<br />x: -2.31664281<br />y:  3.042231e-01","Groups: PWR<br />Groups: PWR<br />x: -2.41995848<br />y:  2.702549e-01<br />x: -2.41995848<br />y:  2.702549e-01","Groups: PWR<br />Groups: PWR<br />x: -1.72965349<br />y:  3.817243e-01<br />x: -1.72965349<br />y:  3.817243e-01","Groups: PWR<br />Groups: PWR<br />x: -1.84451591<br />y:  4.097493e-01<br />x: -1.84451591<br />y:  4.097493e-01","Groups: PWR<br />Groups: PWR<br />x: -2.36973286<br />y:  2.781791e-01<br />x: -2.36973286<br />y:  2.781791e-01","Groups: PWR<br />Groups: PWR<br />x: -1.94546496<br />y:  4.268474e-01<br />x: -1.94546496<br />y:  4.268474e-01","Groups: PWR<br />Groups: PWR<br />x: -1.84911370<br />y:  4.812986e-01<br />x: -1.84911370<br />y:  4.812986e-01","Groups: PWR<br />Groups: PWR<br />x: -1.88010128<br />y:  4.238422e-01<br />x: -1.88010128<br />y:  4.238422e-01","Groups: PWR<br />Groups: PWR<br />x: -2.17836277<br />y:  3.494557e-01<br />x: -2.17836277<br />y:  3.494557e-01","Groups: PWR<br />Groups: PWR<br />x: -1.63647827<br />y:  5.494156e-01<br />x: -1.63647827<br />y:  5.494156e-01","Groups: PWR<br />Groups: PWR<br />x: -2.17900523<br />y:  3.611508e-01<br />x: -2.17900523<br />y:  3.611508e-01"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":5.66929133858268,"symbol":"diamond-open","line":{"width":1.88976377952756,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"PWR","legendgroup":"PWR","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-2.06710470439474,-1.63853007783418,-1.49428726293552,-1.4206311517864,-1.58883764939448,-1.93182763644273,-2.08195530250747,-1.63153349999473,-1.62388651547244,-1.87836183729815,-1.59894451510316,-1.33212615169587,-1.81507566755269,-2.23844242461038,-2.47595083109268,-2.35190684143459,-2.33518469036498,-2.40757634327535,-2.38805545870798,-1.38889594101932,-2.17209571035856,-1.3546032353812,-1.29544960124863,-1.42081097579592,-1.86150072386408,-1.3549057286045,-1.62533855685336,-1.51012876277764,-1.58201552933097,-1.92051660332924,-1.59417075407782,-1.52613470501926,-1.88423730856618,-2.41538728206377,-1.90093343419294,-1.78740863696421,-1.98862142401139,-1.9374598896382,-2.34634382006713,-1.98315728326591,-1.99008554346791],"y":[-0.080872293251652,-0.0411382171698275,-0.000157144323510177,-0.00561618398233117,-0.0378182015335747,-0.00339727405690892,-0.0229671551694812,0.343890319876598,0.337102403754746,0.410965171095116,0.424784237650228,0.473485833227069,0.398362137129231,0.452044997047114,0.326183079102457,0.315062254033135,0.318823259859217,0.330190117748677,0.322925174532546,-1.84176215582376,0.17633588780367,0.278774901238513,0.276952692420498,0.254920972395013,0.18468414044212,0.279481160472465,0.227540553840639,0.430325313347092,0.415786329174193,0.383959023661232,0.423853879376549,0.427502766653358,0.372795532593204,0.385574676622297,0.385513726911318,0.378737290662613,0.389423504983627,0.37089529124158,0.374586151625566,0.386203806332094,0.375185580754343],"text":["Groups: RBMK<br />Groups: RBMK<br />x: -2.06710470<br />y: -8.087229e-02<br />x: -2.06710470<br />y: -8.087229e-02","Groups: RBMK<br />Groups: RBMK<br />x: -1.63853008<br />y: -4.113822e-02<br />x: -1.63853008<br />y: -4.113822e-02","Groups: RBMK<br />Groups: RBMK<br />x: -1.49428726<br />y: -1.571443e-04<br />x: -1.49428726<br />y: -1.571443e-04","Groups: RBMK<br />Groups: RBMK<br />x: -1.42063115<br />y: -5.616184e-03<br />x: -1.42063115<br />y: -5.616184e-03","Groups: RBMK<br />Groups: RBMK<br />x: -1.58883765<br />y: -3.781820e-02<br />x: -1.58883765<br />y: -3.781820e-02","Groups: RBMK<br />Groups: RBMK<br />x: -1.93182764<br />y: -3.397274e-03<br />x: -1.93182764<br />y: -3.397274e-03","Groups: RBMK<br />Groups: RBMK<br />x: -2.08195530<br />y: -2.296716e-02<br />x: -2.08195530<br />y: -2.296716e-02","Groups: RBMK<br />Groups: RBMK<br />x: -1.63153350<br />y:  3.438903e-01<br />x: -1.63153350<br />y:  3.438903e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.62388652<br />y:  3.371024e-01<br />x: -1.62388652<br />y:  3.371024e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.87836184<br />y:  4.109652e-01<br />x: -1.87836184<br />y:  4.109652e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.59894452<br />y:  4.247842e-01<br />x: -1.59894452<br />y:  4.247842e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.33212615<br />y:  4.734858e-01<br />x: -1.33212615<br />y:  4.734858e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.81507567<br />y:  3.983621e-01<br />x: -1.81507567<br />y:  3.983621e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.23844242<br />y:  4.520450e-01<br />x: -2.23844242<br />y:  4.520450e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.47595083<br />y:  3.261831e-01<br />x: -2.47595083<br />y:  3.261831e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.35190684<br />y:  3.150623e-01<br />x: -2.35190684<br />y:  3.150623e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.33518469<br />y:  3.188233e-01<br />x: -2.33518469<br />y:  3.188233e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.40757634<br />y:  3.301901e-01<br />x: -2.40757634<br />y:  3.301901e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.38805546<br />y:  3.229252e-01<br />x: -2.38805546<br />y:  3.229252e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.38889594<br />y: -1.841762e+00<br />x: -1.38889594<br />y: -1.841762e+00","Groups: RBMK<br />Groups: RBMK<br />x: -2.17209571<br />y:  1.763359e-01<br />x: -2.17209571<br />y:  1.763359e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.35460324<br />y:  2.787749e-01<br />x: -1.35460324<br />y:  2.787749e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.29544960<br />y:  2.769527e-01<br />x: -1.29544960<br />y:  2.769527e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.42081098<br />y:  2.549210e-01<br />x: -1.42081098<br />y:  2.549210e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.86150072<br />y:  1.846841e-01<br />x: -1.86150072<br />y:  1.846841e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.35490573<br />y:  2.794812e-01<br />x: -1.35490573<br />y:  2.794812e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.62533856<br />y:  2.275406e-01<br />x: -1.62533856<br />y:  2.275406e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.51012876<br />y:  4.303253e-01<br />x: -1.51012876<br />y:  4.303253e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.58201553<br />y:  4.157863e-01<br />x: -1.58201553<br />y:  4.157863e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.92051660<br />y:  3.839590e-01<br />x: -1.92051660<br />y:  3.839590e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.59417075<br />y:  4.238539e-01<br />x: -1.59417075<br />y:  4.238539e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.52613471<br />y:  4.275028e-01<br />x: -1.52613471<br />y:  4.275028e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.88423731<br />y:  3.727955e-01<br />x: -1.88423731<br />y:  3.727955e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.41538728<br />y:  3.855747e-01<br />x: -2.41538728<br />y:  3.855747e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.90093343<br />y:  3.855137e-01<br />x: -1.90093343<br />y:  3.855137e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.78740864<br />y:  3.787373e-01<br />x: -1.78740864<br />y:  3.787373e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.98862142<br />y:  3.894235e-01<br />x: -1.98862142<br />y:  3.894235e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.93745989<br />y:  3.708953e-01<br />x: -1.93745989<br />y:  3.708953e-01","Groups: RBMK<br />Groups: RBMK<br />x: -2.34634382<br />y:  3.745862e-01<br />x: -2.34634382<br />y:  3.745862e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.98315728<br />y:  3.862038e-01<br />x: -1.98315728<br />y:  3.862038e-01","Groups: RBMK<br />Groups: RBMK<br />x: -1.99008554<br />y:  3.751856e-01<br />x: -1.99008554<br />y:  3.751856e-01"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,169,255,1)","opacity":1,"size":5.66929133858268,"symbol":"triangle-down-open","line":{"width":1.88976377952756,"color":"rgba(0,169,255,1)"}},"hoveron":"points","name":"RBMK","legendgroup":"RBMK","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.910207313209249,-0.594222782434423,-0.83315015176631,-0.666749363349985,-0.826796481458076,-2.1867468603728,-2.16719583985507,-2.06320253197711,-2.3343637573132,-2.24266783348847,-1.7429204860176,-0.775865481499062,-0.710018883729,-0.486273336772297,-0.0388597484618945,-0.655120948129044,-0.61357309641987,-0.204554724251713,-0.269072427631736,-1.6114578879949],"y":[0.719729211077625,0.398764939510313,0.758190226754817,0.814707436446349,0.751850715234526,0.0166136691267211,0.204452808671159,0.168697044001836,0.438810399252202,0.450668779766802,-0.186546430826198,-0.0996251500292496,0.103955923537475,0.12617335442019,0.0256139288978332,0.0862303319474575,0.0837306169127944,0.286290631187567,-0.151664630066094,-0.0256383959580711],"text":["Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.91020731<br />y:  7.197292e-01<br />x: -0.91020731<br />y:  7.197292e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.59422278<br />y:  3.987649e-01<br />x: -0.59422278<br />y:  3.987649e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.83315015<br />y:  7.581902e-01<br />x: -0.83315015<br />y:  7.581902e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.66674936<br />y:  8.147074e-01<br />x: -0.66674936<br />y:  8.147074e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.82679648<br />y:  7.518507e-01<br />x: -0.82679648<br />y:  7.518507e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -2.18674686<br />y:  1.661367e-02<br />x: -2.18674686<br />y:  1.661367e-02","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -2.16719584<br />y:  2.044528e-01<br />x: -2.16719584<br />y:  2.044528e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -2.06320253<br />y:  1.686970e-01<br />x: -2.06320253<br />y:  1.686970e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -2.33436376<br />y:  4.388104e-01<br />x: -2.33436376<br />y:  4.388104e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -2.24266783<br />y:  4.506688e-01<br />x: -2.24266783<br />y:  4.506688e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -1.74292049<br />y: -1.865464e-01<br />x: -1.74292049<br />y: -1.865464e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.77586548<br />y: -9.962515e-02<br />x: -0.77586548<br />y: -9.962515e-02","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.71001888<br />y:  1.039559e-01<br />x: -0.71001888<br />y:  1.039559e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.48627334<br />y:  1.261734e-01<br />x: -0.48627334<br />y:  1.261734e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.03885975<br />y:  2.561393e-02<br />x: -0.03885975<br />y:  2.561393e-02","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.65512095<br />y:  8.623033e-02<br />x: -0.65512095<br />y:  8.623033e-02","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.61357310<br />y:  8.373062e-02<br />x: -0.61357310<br />y:  8.373062e-02","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.20455472<br />y:  2.862906e-01<br />x: -0.20455472<br />y:  2.862906e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -0.26907243<br />y: -1.516646e-01<br />x: -0.26907243<br />y: -1.516646e-01","Groups: VVER-1000<br />Groups: VVER-1000<br />x: -1.61145789<br />y: -2.563840e-02<br />x: -1.61145789<br />y: -2.563840e-02"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":1,"size":5.66929133858268,"symbol":"square-x-open","line":{"width":1.88976377952756,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"VVER-1000","legendgroup":"VVER-1000","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7.18610476875549,9.25607685426129,11.0157752487864,13.1527632836944,10.9920175977317,5.80221164282424,5.25268080430447,6.40103335663626,5.5295240713344,9.27453005212629,6.6723884361922,9.05485574728327,-2.40307641038094,-2.1960097721964,-2.33490012473155,-2.19649452560869,-2.59055681031913,-2.45096874768286,-2.17788170133885,-0.608661215375814,-0.555350305204078,-0.836535605992775,-1.02908498758239,-0.772020621632921,-0.916241741983907,-0.656764069707613,-1.28543208276634,-1.03842273011942,-0.86215810149376,3.05882473452901,6.84915765076341,4.72446208320102,7.27916618337151,7.62173216214013,4.08726655277012,5.42039684252536,7.87811537263591,-1.21075751150578,-1.30294960982798,-1.19388458539663,-2.03111503481952,-1.84982787994161,-1.41301376301366,-1.37760732136952,-1.92527749575026,-2.11096702885672,-1.20697510778473],"y":[-5.32395407307679,-5.32583678269839,-6.04112306281215,-7.07494282809397,-7.49715292138314,-3.70235539721352,-3.91461287997639,-4.02764723952756,-4.14595832551612,-5.33183304612465,-2.95805645638331,-4.76557036951281,0.460455015970282,0.284026848866732,0.462724879712434,0.183545256614867,0.44012867824357,0.462731143373929,0.233331551455276,0.442139689861727,0.483205669520855,0.388768245137701,0.617703717717024,0.368692933762859,0.700331939977523,0.427893129685051,0.499118548702376,0.621388453970244,0.365745982841236,-2.75280965627416,-4.34985319103737,-3.49208553268418,-4.56107753535176,-4.65555217143664,-3.46424413315121,-3.78992648660364,-4.4233879296692,0.659862203938915,0.640757908635156,0.695101504806084,0.300886771705507,0.420205996390609,0.451058539288899,0.468626263339658,0.264484040876087,0.169061474066667,0.536812940821802],"text":["Groups: VVER-440<br />Groups: VVER-440<br />x:  7.18610477<br />y: -5.323954e+00<br />x:  7.18610477<br />y: -5.323954e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  9.25607685<br />y: -5.325837e+00<br />x:  9.25607685<br />y: -5.325837e+00","Groups: VVER-440<br />Groups: VVER-440<br />x: 11.01577525<br />y: -6.041123e+00<br />x: 11.01577525<br />y: -6.041123e+00","Groups: VVER-440<br />Groups: VVER-440<br />x: 13.15276328<br />y: -7.074943e+00<br />x: 13.15276328<br />y: -7.074943e+00","Groups: VVER-440<br />Groups: VVER-440<br />x: 10.99201760<br />y: -7.497153e+00<br />x: 10.99201760<br />y: -7.497153e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  5.80221164<br />y: -3.702355e+00<br />x:  5.80221164<br />y: -3.702355e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  5.25268080<br />y: -3.914613e+00<br />x:  5.25268080<br />y: -3.914613e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  6.40103336<br />y: -4.027647e+00<br />x:  6.40103336<br />y: -4.027647e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  5.52952407<br />y: -4.145958e+00<br />x:  5.52952407<br />y: -4.145958e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  9.27453005<br />y: -5.331833e+00<br />x:  9.27453005<br />y: -5.331833e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  6.67238844<br />y: -2.958056e+00<br />x:  6.67238844<br />y: -2.958056e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  9.05485575<br />y: -4.765570e+00<br />x:  9.05485575<br />y: -4.765570e+00","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.40307641<br />y:  4.604550e-01<br />x: -2.40307641<br />y:  4.604550e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.19600977<br />y:  2.840268e-01<br />x: -2.19600977<br />y:  2.840268e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.33490012<br />y:  4.627249e-01<br />x: -2.33490012<br />y:  4.627249e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.19649453<br />y:  1.835453e-01<br />x: -2.19649453<br />y:  1.835453e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.59055681<br />y:  4.401287e-01<br />x: -2.59055681<br />y:  4.401287e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.45096875<br />y:  4.627311e-01<br />x: -2.45096875<br />y:  4.627311e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.17788170<br />y:  2.333316e-01<br />x: -2.17788170<br />y:  2.333316e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.60866122<br />y:  4.421397e-01<br />x: -0.60866122<br />y:  4.421397e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.55535031<br />y:  4.832057e-01<br />x: -0.55535031<br />y:  4.832057e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.83653561<br />y:  3.887682e-01<br />x: -0.83653561<br />y:  3.887682e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.02908499<br />y:  6.177037e-01<br />x: -1.02908499<br />y:  6.177037e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.77202062<br />y:  3.686929e-01<br />x: -0.77202062<br />y:  3.686929e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.91624174<br />y:  7.003319e-01<br />x: -0.91624174<br />y:  7.003319e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.65676407<br />y:  4.278931e-01<br />x: -0.65676407<br />y:  4.278931e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.28543208<br />y:  4.991185e-01<br />x: -1.28543208<br />y:  4.991185e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.03842273<br />y:  6.213885e-01<br />x: -1.03842273<br />y:  6.213885e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -0.86215810<br />y:  3.657460e-01<br />x: -0.86215810<br />y:  3.657460e-01","Groups: VVER-440<br />Groups: VVER-440<br />x:  3.05882473<br />y: -2.752810e+00<br />x:  3.05882473<br />y: -2.752810e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  6.84915765<br />y: -4.349853e+00<br />x:  6.84915765<br />y: -4.349853e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  4.72446208<br />y: -3.492086e+00<br />x:  4.72446208<br />y: -3.492086e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  7.27916618<br />y: -4.561078e+00<br />x:  7.27916618<br />y: -4.561078e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  7.62173216<br />y: -4.655552e+00<br />x:  7.62173216<br />y: -4.655552e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  4.08726655<br />y: -3.464244e+00<br />x:  4.08726655<br />y: -3.464244e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  5.42039684<br />y: -3.789926e+00<br />x:  5.42039684<br />y: -3.789926e+00","Groups: VVER-440<br />Groups: VVER-440<br />x:  7.87811537<br />y: -4.423388e+00<br />x:  7.87811537<br />y: -4.423388e+00","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.21075751<br />y:  6.598622e-01<br />x: -1.21075751<br />y:  6.598622e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.30294961<br />y:  6.407579e-01<br />x: -1.30294961<br />y:  6.407579e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.19388459<br />y:  6.951015e-01<br />x: -1.19388459<br />y:  6.951015e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.03111503<br />y:  3.008868e-01<br />x: -2.03111503<br />y:  3.008868e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.84982788<br />y:  4.202060e-01<br />x: -1.84982788<br />y:  4.202060e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.41301376<br />y:  4.510585e-01<br />x: -1.41301376<br />y:  4.510585e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.37760732<br />y:  4.686263e-01<br />x: -1.37760732<br />y:  4.686263e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.92527750<br />y:  2.644840e-01<br />x: -1.92527750<br />y:  2.644840e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -2.11096703<br />y:  1.690615e-01<br />x: -2.11096703<br />y:  1.690615e-01","Groups: VVER-440<br />Groups: VVER-440<br />x: -1.20697511<br />y:  5.368129e-01<br />x: -1.20697511<br />y:  5.368129e-01"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,97,204,1)","opacity":1,"size":5.66929133858268,"symbol":"asterisk-open","line":{"width":1.88976377952756,"color":"rgba(255,97,204,1)"}},"hoveron":"points","name":"VVER-440","legendgroup":"VVER-440","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-2.04116516427869],"y":[0.293498911186636],"text":"Groups: AGR<br />Groups: AGR<br />x: -2.0411652<br />y:  0.2934989","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":11.3385826771654,"symbol":"circle-open","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"AGR","legendgroup":"AGR","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.697155376985793],"y":[0.530807958454283],"text":"Groups: BWR<br />Groups: BWR<br />x:  0.6971554<br />y:  0.5308080","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(205,150,0,1)","opacity":1,"size":11.3385826771654,"symbol":"triangle-up-open","line":{"width":1.88976377952756,"color":"rgba(205,150,0,1)"}},"hoveron":"points","name":"BWR","legendgroup":"BWR","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-2.51021461196066],"y":[0.64082682921593],"text":"Groups: CANDU<br />Groups: CANDU<br />x: -2.5102146<br />y:  0.6408268","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":1,"size":11.3385826771654,"symbol":"cross-thin-open","line":{"width":1.88976377952756,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"CANDU","legendgroup":"CANDU","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-2.48015389085656],"y":[0.687093610675999],"text":"Groups: MAGNOX<br />Groups: MAGNOX<br />x: -2.4801539<br />y:  0.6870936","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,190,103,1)","opacity":1,"size":11.3385826771654,"symbol":"x-thin-open","line":{"width":1.88976377952756,"color":"rgba(0,190,103,1)"}},"hoveron":"points","name":"MAGNOX","legendgroup":"MAGNOX","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.288289304781768],"y":[-0.229234106804294],"text":"Groups: PWR<br />Groups: PWR<br />x:  0.2882893<br />y: -0.2292341","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":11.3385826771654,"symbol":"diamond-open","line":{"width":1.88976377952756,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"PWR","legendgroup":"PWR","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-1.83269317101943],"y":[0.23412496444627],"text":"Groups: RBMK<br />Groups: RBMK<br />x: -1.8326932<br />y:  0.2341250","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,169,255,1)","opacity":1,"size":11.3385826771654,"symbol":"triangle-down-open","line":{"width":1.88976377952756,"color":"rgba(0,169,255,1)"}},"hoveron":"points","name":"RBMK","legendgroup":"RBMK","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-1.09665099680659],"y":[0.248550270493303],"text":"Groups: VVER-1000<br />Groups: VVER-1000<br />x: -1.0966510<br />y:  0.2485503","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":1,"size":11.3385826771654,"symbol":"square-x-open","line":{"width":1.88976377952756,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"VVER-1000","legendgroup":"VVER-1000","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2.2548116713507],"y":[-1.69253597211157],"text":"Groups: VVER-440<br />Groups: VVER-440<br />x:  2.2548117<br />y: -1.6925360","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,97,204,1)","opacity":1,"size":11.3385826771654,"symbol":"asterisk-open","line":{"width":1.88976377952756,"color":"rgba(255,97,204,1)"}},"hoveron":"points","name":"VVER-440","legendgroup":"VVER-440","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-4.90861094106254,38.2684297293135],"y":[0,0],"text":"yintercept: 0","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,0],"y":[-17.4438892744789,38.1230249853741],"text":"xintercept: 0","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":44.4931506849315,"r":7.30593607305936,"b":40.9132420091324,"l":43.1050228310502},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":"Individuals - PCA","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-4.90861094106254,38.2684297293135],"tickmode":"array","ticktext":["0","10","20","30"],"tickvals":[0,10,20,30],"categoryorder":"array","categoryarray":["0","10","20","30"],"nticks":null,"ticks":"outside","tickcolor":"rgba(0,0,0,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":"Dim1 (24.9%)","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-17.4438892744789,38.1230249853741],"tickmode":"array","ticktext":["-10","0","10","20","30"],"tickvals":[-10,0,10,20,30],"categoryorder":"array","categoryarray":["-10","0","10","20","30"],"nticks":null,"ticks":"outside","tickcolor":"rgba(0,0,0,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"Dim2 (9.8%)","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"y":0.972933070866142},"annotations":[{"text":"Groups","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"source":"A","attrs":{"2f0576028c71":{"colour":{},"shape":{},"x":{},"y":{},"x.1":{},"y.1":{},"type":"scatter"},"2f051e0635e0":{"colour":{},"shape":{},"x":{},"y":{}},"2f052d4cc0e4":{"yintercept":{}},"2f056fcda30f":{"xintercept":{}}},"cur_data":"2f0576028c71","visdat":{"2f0576028c71":["function (y) ","x"],"2f051e0635e0":["function (y) ","x"],"2f052d4cc0e4":["function (y) ","x"],"2f056fcda30f":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script><img src="clustering_files/figure-html/unnamed-chunk-3-2.png" width="864" /></p>
+</div>
+<div id="random-forest-decision-trees" class="section level2">
+<h2>Random forest decision trees</h2>
+<p><strong>100</strong> observations are aleatorily chosen from the <code>sfcompo</code> data set : this will be our <em>test set</em>. The remaining 547 observations are our <em>training set</em>.</p>
+<div id="training-set" class="section level3">
+<h3>Training set</h3>
+<p>The aleatory training dataset is chosen from the 647 samples of our <code>sfcompo</code> dataset.</p>
+<pre><code>#&gt; Warning: Ignoring unknown parameters: binwidth, bins, pad
+
+#&gt; Warning: Ignoring unknown parameters: binwidth, bins, pad</code></pre>
+<p><img src="clustering_files/figure-html/histos-1.png" width="864" /></p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+AGR
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+BWR
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+CANDU
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+MAGNOX
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+PWR
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+RBMK
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+VVER-1000
+</th>
+<th style="text-align:right;-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg);">
+VVER-440
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AGR
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BWR
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CANDU
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MAGNOX
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PWR
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RBMK
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VVER-1000
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VVER-440
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+</tbody>
+</table>
+<p>The calculated efficiency of the above algorith (true positives over total cases) is 92 %.</p>
+</div>
+</div>
+<div id="predictor-of-burnup" class="section level2">
+<h2>Predictor of Burnup</h2>
+</div>
+</div>
+
+<div class="bandContent">
+  <hr>
+  <div style="text-align:center" id="copyright">© Copyright 2018 Franco Michel-Sendis.</div>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -285,7 +285,19 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Resources
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="clustering.html">Machine Learning</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Presentations
      
     <span class="caret"></span>
   </a>
@@ -299,12 +311,22 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="app.html">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-bar-chart"></span>
      
     App
+     
+    <span class="caret"></span>
   </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="app.html">Launch remote</a>
+    </li>
+    <li>
+      <a href="install.html">Local install</a>
+    </li>
+  </ul>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -318,9 +340,17 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#sendislab">Sendislab</a><ul>
+<li><a href="#deployment">Deployment</a></li>
+</ul></li>
+</ul>
+</div>
 
 <div id="sendislab" class="section level1">
 <h1>Sendislab</h1>
+<p><a href="https://travis-ci.org/fmichelsendis/sendislab"><img src="https://travis-ci.org/fmichelsendis/sendislab.svg?branch=master" alt="Build Status" /></a></p>
 <p>A repository for creating the website <a href="http://sendislab.org">Sendislab</a></p>
 <div id="deployment" class="section level2">
 <h2>Deployment</h2>
