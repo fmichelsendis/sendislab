@@ -10,8 +10,7 @@ Description: Prepares build of sendislab website
 Encoding: UTF-8
 Imports:
     data.table,
-    devtools, 
-    factoExtra,
+    devtools,  
     ggplot2, 
     kableExtra,
     knitr,

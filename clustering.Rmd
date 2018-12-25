@@ -34,8 +34,8 @@ library(devtools)
 devtools::install_github("fmichelsendis/sendis")
 library(sendis)
 
-#install.packages("factoextra")
-#library(factoextra)
+install.packages("factoextra")
+library(factoextra)
 
 
 ```
