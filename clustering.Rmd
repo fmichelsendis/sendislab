@@ -34,7 +34,7 @@ library(devtools)
 devtools::install_github("fmichelsendis/sendis")
 library(sendis)
 
-install.packages("factoextra")
+#install.packages("factoextra")
 library(factoextra)
 
 
@@ -54,7 +54,7 @@ Machine Learning examples are applied to an example of spent nuclear fuel data.
 
 #Making-of sfcompo dataset : 
 
-sf<-fread("../sendis/data-raw/sfcompo2.csv", stringsAsFactors = TRUE)%>%
+sf<-fread("data-raw/sfcompo2.csv", stringsAsFactors = TRUE)%>%
   select(
     # -"Reactor design",
     # -"Assembly identifier",
@@ -218,9 +218,12 @@ A dataset `sfcompo` has been extracted from the official SFCOMPO-2.0 database, c
 
 ```{r, echo=FALSE, message=FALSE }
 
+
+devtools::install_github("fmichelsendis/rsfcompo2", dependencies = FALSE)
+library(rsfcompo2)
 ## Reading data already prepped
-sf_data<-fread("../sendis/data-raw/sf_longdata.csv", 
-               stringsAsFactors = TRUE)
+sf_data<-sfcompo2
+
 subdf<-sf_data%>%
   select(-EPU, -EPUFISS, -EU235)
 rownames(subdf)<-NULL
