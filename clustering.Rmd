@@ -17,12 +17,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-#library(VIM)
 library(tidyverse)
 library(ggplot2)
 library(plotly)
-library(scales)
-#library(sendis)
+library(scales) 
 library(stats)
 library(kableExtra)
 library(factoextra)
@@ -32,6 +30,10 @@ library(rpart)
 library(rpart.plot)
 library(splitstackshape)
 library(data.table)
+library(devtools)
+
+devtools::install_github("fmichelsendis/sendis")
+library(sendis)
 
 ```
 
