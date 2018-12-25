@@ -23,7 +23,6 @@ library(plotly)
 library(scales) 
 library(stats)
 library(kableExtra)
-library(factoextra)
 library(randomForest)
 library(rattle)
 library(rpart)
@@ -34,6 +33,11 @@ library(devtools)
 
 devtools::install_github("fmichelsendis/sendis")
 library(sendis)
+
+install.packages("factoextra")
+
+library(factoextra)
+
 
 ```
 
