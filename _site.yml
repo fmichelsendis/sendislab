@@ -16,8 +16,10 @@ navbar:
       menu:
         - text: "sendis"
           href: https://fmichelsendis.github.io/sendis/
+        - text: "rsfcompo2"
+          href: https://fmichelsendis.github.io/rsfcompo2
      
-    - text: "Articles"
+    - text: "Rticles"
       #icon: fa-gear
       menu:
         - text: "Machine Learning"
