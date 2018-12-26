@@ -14,21 +14,10 @@ output:
        bibliography: "fms.bib"
        link-citations: true 
 --- 
+
 [![Build Status](https://travis-ci.org/fmichelsendis/sendislab.svg?branch=master)](https://travis-ci.org/fmichelsendis/sendislab)
 
 <br>
 
-# Introduction 
-
-texte texte texte
-
-## subsection 
-
-bla bla bla
-
-
-
-# Bla bla 
-
-
+ 
  
